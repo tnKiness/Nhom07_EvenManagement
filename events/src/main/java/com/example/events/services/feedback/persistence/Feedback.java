@@ -1,5 +1,7 @@
 package com.example.events.services.feedback.persistence;
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.annotation.Id;
 
 public class Feedback {
@@ -7,16 +9,18 @@ public class Feedback {
     @Id
     private String id;
 
-    private String studentId;
+    private String userId;
     private String eventId;
     private String content;
+    private LocalDateTime createdAt;
 
     public Feedback() { }
 
-    public Feedback(String studentId, String eventId, String content) {
-        this.studentId = studentId;
+    public Feedback(String userId, String eventId, String content, LocalDateTime createdAt) {
+        this.userId = userId;
         this.eventId = eventId;
         this.content = content;
+        this.createdAt = createdAt;
     }
 
     public String getId() {
@@ -27,12 +31,12 @@ public class Feedback {
         this.id = id;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getEventId() {
@@ -51,9 +55,17 @@ public class Feedback {
         this.content = content;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Override
     public String toString() {
-        return "Feedback [id=" + id + ", studentId=" + studentId + ", eventId=" + eventId + ", content=" + content
-                + "]";
+        return "Feedback [id=" + id + ", userId=" + userId + ", eventId=" + eventId + ", content=" + content
+                + ", createdAt=" + createdAt + "]";
     }
 }

@@ -18,12 +18,14 @@ public class User {
     private String username;
     private String password;
     private UserRole role;
-
-    // Following properties for students only
+    
+    // Following four properties for students only
     private String studentId;
     private String name;
     private String email;
     private String phoneNumber;
+
+    private String avatar;
 
     @DBRef
     private List<Notification> notifications;
@@ -33,13 +35,14 @@ public class User {
 
     public User() { }
 
-    public User(String username, String password) {
+    public User(String username, String password, String avatar) {
         this.username = username;
         this.password = password;
+        this.avatar = avatar;
         this.role = UserRole.ROLE_ADMIN;
     }
 
-    public User(String studentId, String name, String email, String phoneNumber, String password) {
+    public User(String studentId, String name, String email, String phoneNumber, String password, String avatar) {
         this.studentId = studentId;
         this.name = name;
         this.email = email;
@@ -47,6 +50,7 @@ public class User {
 
         this.username = studentId;
         this.password = password;
+        this.avatar = avatar;
         this.role = UserRole.ROLE_USER;
 
         this.notifications = new ArrayList<>();
@@ -117,6 +121,14 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public List<Notification> getNotifications() {
         return notifications;
     }
@@ -137,6 +149,6 @@ public class User {
     public String toString() {
         return "User [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role
                 + ", studentId=" + studentId + ", name=" + name + ", email=" + email + ", phoneNumber=" + phoneNumber
-                + ", notifications=" + notifications + ", scorecard=" + scorecard + "]";
+                + ", avatar=" + avatar + ", notifications=" + notifications + ", scorecard=" + scorecard + "]";
     }
 }

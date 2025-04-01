@@ -3,61 +3,58 @@ import Swal from "sweetalert2";
 import axios from "axios";
 
 const initialState = {
-  other: [],
+  attendance: [],
   isLoading: false,
   error: null,
 };
 
-export const getOther = createAsyncThunk(
-  "other/getOther",
+export const getAttendance = createAsyncThunk(
+  "attendance/get-attendance",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:3000/api/v1/otherVaccine");
-      console.log(res.data.otherVaccine);
-      return res.data.otherVaccine;
+      const res = await axios.get("http://localhost:8080/api/attendance");
+      return res.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
   }
 );
 
-export const updateStatusOder = createAsyncThunk(
-  "other/updateStatusOder",
-  async (payload, { rejectWithValue }) => {
-    console.log(payload);
+export const updateStatusAttendance = createAsyncThunk(
+  "attendance/update-status-attendance",
+  async ({ id, data }, { rejectWithValue }) => {
     try {
       const res = await axios.put(
-        "http://localhost:3000/api/v1/otherVaccine/update",
-        payload
+        `http://localhost:8080/api/attendance/${id}`,
+        data
       );
-      console.log(res.data.otherVaccine);
-      return res.data.otherVaccine;
+      return res.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
   }
 );
 
-export const getOtherById = createAsyncThunk(
-  "other/getOtherById",
+export const getAttendanceById = createAsyncThunk(
+  "attendance/get-attendance-by-id",
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/v1/otherVaccine/${payload}`
+        `http://localhost:8080/api/attendance/${payload}`
       );
-      return res.data.otherVaccine;
+      return res.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
   }
 );
 
-export const addOther = createAsyncThunk(
-  "other/addOther",
+export const addAttendance = createAsyncThunk(
+  "attendance/add-attendance",
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/otherVaccine/add",
+        "http://localhost:8080/api/attendance",
         payload,
         {
           headers: {
@@ -67,7 +64,7 @@ export const addOther = createAsyncThunk(
       );
       localStorage.clear();
       window.location.href = "/othersuccess";
-      return res.data.other;
+      return res.data;
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -79,64 +76,61 @@ export const addOther = createAsyncThunk(
   }
 );
 
-const otherSlice = createSlice({
-  name: "other",
+const attendanceSlice = createSlice({
+  name: "attendance",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(addOther.pending, (state) => {
+      .addCase(addAttendance.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(addOther.rejected, (state, action) => {
+      .addCase(addAttendance.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })
-      .addCase(addOther.fulfilled, (state, action) => {
+      .addCase(addAttendance.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.other.push(action.payload);
+        state.attendance.push(action.payload);
       })
-      .addCase(getOther.pending, (state) => {
+      .addCase(getAttendance.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getOther.rejected, (state, action) => {
+      .addCase(getAttendance.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })
-      .addCase(getOther.fulfilled, (state, action) => {
+      .addCase(getAttendance.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.attendance = action.payload;
+      })
+      .addCase(getAttendanceById.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAttendanceById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(getAttendanceById.fulfilled, (state, action) => {
         state.isLoading = false;
         state.other = action.payload;
       })
-      .addCase(getOtherById.pending, (state) => {
+      .addCase(updateStatusAttendance.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getOtherById.rejected, (state, action) => {
+      .addCase(updateStatusAttendance.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })
-      .addCase(getOtherById.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.other = action.payload;
-      })
-      .addCase(updateStatusOder.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(updateStatusOder.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload;
-      })
-      .addCase(updateStatusOder.fulfilled, (state, action) => {
+      .addCase(updateStatusAttendance.fulfilled, (state, action) => {
         state.isLoading = false;
         const { status, id } = action.meta.arg;
-        const index = state.other.findIndex((item) => item._id === id);
+        const index = state.attendance.findIndex((item) => item.id === id);
         if (index !== -1) {
-          state.other[index].status = status;
+          state.attendance[index].status = status;
         }
       });
   },
 });
 
-export default otherSlice.reducer;
-
-export const selectOther = (state) => state.other.other;
-export const selectOtherLoading = (state) => state.other.isLoading;
+export default attendanceSlice.reducer;

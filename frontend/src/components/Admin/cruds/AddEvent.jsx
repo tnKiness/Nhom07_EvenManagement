@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import "./loading.css";
 import { getCategory } from "../../../redux/categorySlice";
 import { addEvent } from "../../../redux/eventSlice";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -30,15 +29,7 @@ const AddEvent = () => {
     resolver: yupResolver(schema),
   });
   const dispatch = useDispatch();
-  const user = JSON.parse(sessionStorage.getItem("user"));
   const category = useSelector((state) => state.category.category);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (user.role !== "ROLE_ADMIN") {
-      navigate("/login");
-    }
-  }, [user.role]);
 
   useEffect(() => {
     dispatch(getCategory());

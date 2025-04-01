@@ -14,11 +14,6 @@ public class Notification {
 
     public Notification() { }
 
-    public Notification(String message) {
-        this.message = message;
-        this.createdAt = LocalDateTime.now();
-    }
-
     public Notification(String message, LocalDateTime createdAt) {
         this.message = message;
         this.createdAt = createdAt;
@@ -28,12 +23,24 @@ public class Notification {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getMessage() {
         return message;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override

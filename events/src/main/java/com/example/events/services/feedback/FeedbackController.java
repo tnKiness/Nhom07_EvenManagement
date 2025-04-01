@@ -9,7 +9,7 @@ import com.example.events.services.feedback.business.FeedbackService;
 import com.example.events.services.feedback.persistence.FeedbackDto;
 
 @RestController
-@RequestMapping("/api/feedbacks")
+@RequestMapping("/api/feedback")
 public class FeedbackController {
     
     @Autowired

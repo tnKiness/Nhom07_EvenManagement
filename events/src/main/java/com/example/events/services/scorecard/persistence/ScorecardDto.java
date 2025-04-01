@@ -1,6 +1,7 @@
 package com.example.events.services.scorecard.persistence;
 
 public class ScorecardDto {
+    private String id;
     private int score;
     private String lastUpdated;
 
@@ -9,6 +10,14 @@ public class ScorecardDto {
     public ScorecardDto(int score, String lastUpdated) {
         this.score = score;
         this.lastUpdated = lastUpdated;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public int getScore() {

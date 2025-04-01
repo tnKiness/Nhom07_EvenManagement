@@ -6,6 +6,7 @@ import com.example.events.services.notification.persistence.NotificationDto;
 import com.example.events.services.scorecard.persistence.ScorecardDto;
 
 public class UserDto {
+    private String id;
     private String username;
     private String password;
     private String role;
@@ -13,6 +14,7 @@ public class UserDto {
     private String name;
     private String email;
     private String phoneNumber;
+    private String avatar;
     private List<NotificationDto> notifications;
     private ScorecardDto scorecard;
 
@@ -21,6 +23,7 @@ public class UserDto {
     public UserDto(String username, String password, String role, String studentId, String name, String email, 
         String phoneNumber, List<NotificationDto> notifications, ScorecardDto scorecard) {
         
+        this.id = "";
         this.username = username;
         this.password = password;
         this.role = role;
@@ -28,8 +31,17 @@ public class UserDto {
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.avatar = "";
         this.notifications = notifications;
         this.scorecard = scorecard;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -86,6 +98,14 @@ public class UserDto {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public List<NotificationDto> getNotifications() {

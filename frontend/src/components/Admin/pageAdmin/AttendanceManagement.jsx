@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import {
   CardBody,
@@ -8,29 +7,27 @@ import {
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getOther, updateStatusOder } from "../../../redux/otherSlice";
+import { getAttendance, updateStatusAttendance } from "../../../redux/attendanceSlice";
 import "../cruds/loading.css";
 
 const TABLE_HEAD = [
   "ID",
-  "Thời gian đặt",
-  "Tên người nhận",
-  "Số điện thoại",
-  "Địa chỉ",
-  "Ghi chú",
+  "MSSV",
+  "Tên sinh viên",
+  "Mã sự kiện",
+  "Thời điểm đăng ký",
   "Trạng thái",
-  "",
-  "",
+  ""
 ];
 
-const OtherManagement = () => {
+const AttendanceManagement = () => {
   const dispatch = useDispatch();
-  const other = useSelector((state) => state.other.other);
+  const attendance = useSelector((state) => state.attendance.attendance);
 
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    dispatch(getOther());
+    dispatch(getAttendance());
   }, [dispatch]);
 
   const handleSearch = (e) => {
@@ -42,9 +39,9 @@ const OtherManagement = () => {
       title: "Cập nhật trạng thái",
       input: "select",
       inputOptions: {
-        "Chưa xử lý": "Chưa xử lý",
-        "Đang xử lý": "Đang xử lý",
-        "Đã hoàn thành": "Đã hoàn thành",
+        "REGISTERED": "Đã đăng ký",
+        "ATTENDED": "Đã tham gia",
+        "CANCELLED": "Không tham gia",
       },
       inputPlaceholder: "Chọn trạng thái",
       showCancelButton: true,
@@ -56,7 +53,7 @@ const OtherManagement = () => {
           id: id,
           status: result.value,
         };
-        dispatch(updateStatusOder(data));
+        dispatch(updateStatusAttendance(data));
       }
     });
   };
@@ -71,7 +68,7 @@ const OtherManagement = () => {
         >
           <div className="mb-12 flex flex-col justify-between gap-8 md:flex-row md:items-center">
             <div className="font-bold mt-7 text-2xl ml-6">
-              <h1>Quản Lý Hóa Đơn Thanh Toán</h1>
+              <h1>Quản Lý Tham Gia Sự Kiện</h1>
             </div>
             <div className="flex w-full shrink-0 gap-2 md:w-max mt-10 mr-3">
               <div className="flex items-center gap-5 w-[350px] h-[40px] border border-gray-200 rounded-lg py-3 px-5">
@@ -123,30 +120,30 @@ const OtherManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {other.filter(
+              {attendance.filter(
                   (item) =>
-                    item.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    item.phone_number.includes(searchTerm)
+                    item.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    item.studentId.includes(searchTerm)
                 )
                 .map(
                   (
-                    { _id, createdAt, username, phone_number, address, note, status },
+                    { id, studentId, studentName, eventId, registeredAt, attendanceStatus },
                     index
                   ) => {
-                    const isLast = index === other.length - 1;
+                    const isLast = index === attendance.length - 1;
                     const classes = isLast
                       ? "p-4"
                       : "p-4 border-b border-blue-gray-50";
 
                     return (
-                      <tr key={_id}>
+                      <tr key={id}>
                         <td className={classes}>
                           <Typography
                             variant="small"
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {_id}
+                            {id}
                           </Typography>
                         </td>
                         <td className={classes}>
@@ -155,7 +152,7 @@ const OtherManagement = () => {
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {new Date(createdAt).toLocaleDateString("en-GB")}
+                            {studentId}
                           </Typography>
                         </td>
                         <td className={classes}>
@@ -164,7 +161,7 @@ const OtherManagement = () => {
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {username}
+                            {studentName}
                           </Typography>
                         </td>
                         <td className={classes}>
@@ -173,7 +170,7 @@ const OtherManagement = () => {
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {phone_number}
+                            {eventId}
                           </Typography>
                         </td>
                         <td className={classes}>
@@ -182,16 +179,7 @@ const OtherManagement = () => {
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {address}
-                          </Typography>
-                        </td>
-                        <td className={classes}>
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {note}
+                            {new Date(registeredAt).toLocaleDateString("en-GB")}
                           </Typography>
                         </td>
                         <td className={classes}>
@@ -206,17 +194,10 @@ const OtherManagement = () => {
                         <td className={classes}>
                           <button
                             className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full"
-                            onClick={() => handleUpdateStatus(_id)}
+                            onClick={() => handleUpdateStatus(id)}
                           >
                             Cập nhật
                           </button>
-                        </td>
-                        <td className={classes}>
-                          <Link to={`/otherdetails/${_id}`}>
-                            <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full">
-                              Chi tiết
-                            </button>
-                          </Link>
                         </td>
                       </tr>
                     );
@@ -230,5 +211,5 @@ const OtherManagement = () => {
   );
 };
 
-export default OtherManagement;
+export default AttendanceManagement;
 

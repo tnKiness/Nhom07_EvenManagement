@@ -1,7 +1,6 @@
 import {
   PlusIcon,
 } from "@heroicons/react/24/solid";
-import { useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -9,59 +8,55 @@ import {
   CardBody,
   Button,
 } from "@material-tailwind/react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUsers } from "../../../redux/userSlice";
+import {
+  getNotification,
+} from "../../../redux/notificationSlice";
+import "../cruds/loading.css";
 import { Link } from "react-router-dom";
 
-const TABLE_HEAD = [
-  "Tên Tài Khoản",
-  "MSSV",
-  "Tên",
-  "Email",
-  "Số Điện Thoại",
-  "Vai Trò",
-  "",
-];
+const TABLE_HEAD = ["id", "Thông Báo", "Ngày Tạo", ""];
 
-const AccountManagement = () => {
+const Notification = () => {
+  const notification = useSelector((state) => state.notification.notification);
+  const isLoading = useSelector((state) => state.notification.isLoading);
   const dispatch = useDispatch();
-  const users = useSelector((state) => state.user.users || []);
-  const isLoading = useSelector((state) => state.user.isLoading);
-  const auth = useSelector((state) => state.auth.currentUser);
+  // Tạo state để lưu từ khóa tìm kiếm
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Hàm để cập nhật từ khóa tìm kiếm khi người dùng nhập vào input
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
   useEffect(() => {
-    dispatch(getUsers());
+    dispatch(getNotification());
   }, [dispatch]);
-
-  if (auth.role !== "ROLE_ADMIN") {
-    return null;
-  }
-
+  
   return (
-    <>
+    <div className="content-wrapper">
       {isLoading && (
         <div className="loading-overlay">
           <div className="loading-spinner"></div>
         </div>
       )}
-      <div className="content-wrapper">
-        <Card className="w-full ml-2">
-          <CardHeader
-            floated={false}
-            shadow={false}
-            className="content-header rounded-none"
-          >
+      <div className="flex">
+        <Card className="ml-2 w-full">
+          <CardHeader floated={false} shadow={false} className="content-header rounded-none">
             <div className="mb-12 flex flex-col justify-between gap-8 md:flex-row md:items-center">
-              <div className="font-bold mt-7 text-2xl">
-                <h1>Quản Lý Tài Khoản</h1>
+              <div className="font-bold mt-7 text-2xl ml-6">
+                <h1>Quản Lý Thông Báo</h1>
               </div>
               <div className="flex w-full shrink-0 gap-2 md:w-max mt-10 mr-3">
-                <div className="flex items-center gap-5 w-[300px] border border-gray-200 rounded-lg py-3 px-5">
-                  <input
-                    type="text"
-                    className="w-full outline-none bg-transparent"
-                    placeholder="Tìm kiếm..."
-                  />
+                <div className="flex items-center gap-5 w-[350px] h-[40px] border border-gray-200 rounded-lg py-3 px-5">
+                <input
+                  type="text"
+                  className="w-full outline-none bg-transparent"
+                  placeholder="Tìm kiếm..."
+                  value={searchTerm}
+                  onChange={handleSearch}
+                />
                   <span className="flex-shrink-0 text-gray-500">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -79,9 +74,8 @@ const AccountManagement = () => {
                     </svg>
                   </span>
                 </div>
-                <div className="mb-2 h-14">
-                  {/* TODO: Tạo trang thêm tài khoản */}
-                  <Link to="/add-account">
+                <div className=" mb-2 h-14">
+                  <Link to="/add-notification">
                     <Button className="flex items-center gap-1 rounded-md h-11 bg-blue-500 w-29 hover:bg-blue-600 text-md">
                       <PlusIcon className="h-7 w-7" />
                       Thêm
@@ -91,10 +85,10 @@ const AccountManagement = () => {
               </div>
             </div>
           </CardHeader>
-          <CardBody className="container-fluid px-0 ">
+          <CardBody className="px-0 container-fluid">
             <table className="w-full min-w-max table-auto text-left">
               <thead>
-                <tr className="bg-blue-800 text-white">
+                <tr className=" bg-blue-800 text-white">
                   {TABLE_HEAD.map((head) => (
                     <th
                       key={head}
@@ -112,33 +106,24 @@ const AccountManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.length > 0 &&
-                  users.map(
-                    (
-                      {
-                        username,
-                        studentId,
-                        name,
-                        email,
-                        phoneNumber,
-                        role
-                      },
-                      index
-                    ) => {
-                      const isLast = index === users.length - 1;
+                {notification.length > 0 &&
+                  notification.filter((item) =>
+                    item.message.toLowerCase().includes(searchTerm.toLowerCase())
+                  ).map(
+                    ({ id, message, createdAt }, index) => {
+                      const isLast = index === notification.length - 1;
                       const classes = isLast
                         ? "p-4"
                         : "p-4 border-b border-blue-gray-50";
-
                       return (
-                        <tr key={username}>
+                        <tr key={id}>
                           <td className={classes}>
                             <Typography
                               variant="small"
                               color="blue-gray"
-                              className="font-bold"
+                              className="font-normal"
                             >
-                              {username}
+                              {id}
                             </Typography>
                           </td>
                           <td className={classes}>
@@ -147,7 +132,7 @@ const AccountManagement = () => {
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {studentId}
+                              {message}
                             </Typography>
                           </td>
                           <td className={classes}>
@@ -156,35 +141,16 @@ const AccountManagement = () => {
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {name}
+                              {new Date(createdAt).toLocaleDateString("en-GB")}
                             </Typography>
                           </td>
                           <td className={classes}>
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal"
+                            {/* <Button
+                              onClick={() => handleDelete(id)}
+                              className="inline-flex items-center gap-2 justify-center px-8 py-4 text-white bg-blue-500 rounded-lg h-[50px] w-[50px]"
                             >
-                              {email}
-                            </Typography>
-                          </td>
-                          <td className={classes}>
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal"
-                            >
-                              {phoneNumber}
-                            </Typography>
-                          </td>
-                          <td className={classes}>
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal"
-                            >
-                              {role}
-                            </Typography>
+                              <span>Gửi tất cả</span>
+                            </Button> */}
                           </td>
                         </tr>
                       );
@@ -195,8 +161,8 @@ const AccountManagement = () => {
           </CardBody>
         </Card>
       </div>
-    </>
+    </div>
   );
 };
 
-export default AccountManagement;
+export default Notification;

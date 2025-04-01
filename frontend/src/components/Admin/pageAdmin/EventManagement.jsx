@@ -35,10 +35,10 @@ const EventManagement = () => {
     setSearchTerm(e.target.value);
   };
 
-  // // Bước 2: Filter dữ liệu dựa trên từ khóa tìm kiếm
-  // const filteredEvents = event.filter((v) =>
-  //   v.name.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
+  // Bước 2: Filter dữ liệu dựa trên từ khóa tìm kiếm
+  const filteredEvents = event.filter((v) =>
+    v.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   useEffect(() => {
     dispatch(getEvent());
@@ -126,10 +126,9 @@ const EventManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {event && !loading &&
-                  // Change back to filteredEvents here when done
-                  event.length > 0 &&
-                  event.map((row) => (
+                {!loading &&
+                  filteredEvents.length > 0 &&
+                  filteredEvents.map((row) => (
                     <tr key={row.id}>
                       <td className="w-[100px] h-[90px] ">
                         <img src={row.image} alt={row.name} />

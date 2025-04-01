@@ -41,6 +41,7 @@ public class AttendanceRecordService {
 
         if (updatedAttendanceRecord != null) {
             updatedAttendanceRecord.setStudentId(attendanceRecordDto.getStudentId());
+            updatedAttendanceRecord.setStudentName(attendanceRecordDto.getStudentName());
             updatedAttendanceRecord.setEventId(attendanceRecordDto.getEventId());
             updatedAttendanceRecord.setAttendanceStatus(AttendanceStatus.fromValue(attendanceRecordDto.getAttendanceStatus()));
 

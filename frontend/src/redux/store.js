@@ -6,10 +6,10 @@ import userSlice from "./userSlice";
 import patientSlice from "./patientSlice";
 import categorySlice from "./categorySlice";
 import vaccinePlanSlice from "./vaccinePlanSlice";
-import commentSlice from "./commentSlice";
+import feedbackSlice from "./feedbackSlice";
 import cartSlice from "./cartSlice";
-import otherSlice from "./otherSlice";
-import messengerSlice from "./messengerSlice";
+import attendanceSlice from "./attendanceSlice";
+import notificationSlice from "./notificationSlice";
 import postSlice from "./postSlice";
 import statisticalSlice from "./statisticalSlice";
 
@@ -22,10 +22,10 @@ const store = configureStore({
     patient: patientSlice,
     category: categorySlice,
     vaccinePlan: vaccinePlanSlice,
-    comment: commentSlice,
+    feedback: feedbackSlice,
     cart: cartSlice,
-    other: otherSlice,
-    messenger: messengerSlice,
+    attendance: attendanceSlice,
+    notification: notificationSlice,
     post: postSlice,
     statistical: statisticalSlice,
   },

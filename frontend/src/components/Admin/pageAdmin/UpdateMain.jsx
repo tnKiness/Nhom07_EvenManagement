@@ -1,3 +1,5 @@
+// TODO: Update user info
+
 import { useEffect, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -7,7 +9,6 @@ import { useParams } from "react-router-dom";
 import { getUserById, updateUser } from "../../../redux/userSlice";
 import "../cruds/loading.css";
 import Footer from "../../post/Footer";
-import axios from "axios";
 
 const schema = yup.object().shape({
   username: yup.string().required("Vui lòng nhập tên"),

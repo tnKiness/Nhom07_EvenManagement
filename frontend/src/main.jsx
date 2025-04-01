@@ -18,12 +18,12 @@ import AddCategory from "./components/Admin/cruds/AddCategory.jsx";
 import UpdateMain from "./components/Admin/pageAdmin/UpdateMain.jsx";
 import VaccinesDetail from "./pages/VaccinesDetail.jsx";
 import Cart from "./pages/Cart.jsx";
-import OtherManagement from "./components/Admin/pageAdmin/OtherManagement.jsx";
-import CommentManagement from "./components/Admin/pageAdmin/CommentManagement.jsx";
-import OtherDetails from "./components/Admin/pageAdmin/OtherDetails.jsx";
+import AttendanceManagement from "./components/Admin/pageAdmin/AttendanceManagement.jsx";
+import FeedbackManagement from "./components/Admin/pageAdmin/FeedbackManagement.jsx";
+import Notification from "./components/Admin/pageAdmin/Notification.jsx";
+import AddNotification from "./components/Admin/cruds/AddNotification.jsx";
 import OtherSuccess from "./pages/OtherSuccess.jsx";
 import Dashboard from "./components/Admin/pageAdmin/Dashboard.jsx";
-import MessageToPhone from "./components/Admin/pageAdmin/MessageToPhone.jsx";
 import LayoutAdmin from "./components/LayoutAdmin.jsx";
 import CategoryMain from "./components/Admin/pageAdmin/CategoryMain.jsx";
 import ListEvents from "./pages/ListEvents.jsx";
@@ -109,10 +109,16 @@ const router = createBrowserRouter([
         path: "/edit-event/:id",
         element: <EditEvent></EditEvent>,
       },
-  
-    
       {
-        path: "/AccountManagement",
+        path: "/notifications",
+        element: <Notification></Notification>,
+      },
+      {
+        path: "/add-notification",
+        element: <AddNotification></AddNotification>,
+      },
+      {
+        path: "/account-management",
         element: <AccountManagement></AccountManagement>,
       },
       {
@@ -125,20 +131,12 @@ const router = createBrowserRouter([
       },
     
       {
-        path: "/otherManagement",
-        element: <OtherManagement></OtherManagement>,
+        path: "/attendance-list",
+        element: <AttendanceManagement></AttendanceManagement>,
       },
       {
-        path: "/commentManagement",
-        element: <CommentManagement></CommentManagement>,
-      },
-      {
-        path: "/otherdetails/:id",
-        element: <OtherDetails></OtherDetails>,
-      },
-      {
-        path: "/messToPhone",
-        element: <MessageToPhone></MessageToPhone>,
+        path: "/feedback-management",
+        element: <FeedbackManagement></FeedbackManagement>,
       },
     ],
   },

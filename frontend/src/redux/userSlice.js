@@ -1,9 +1,9 @@
-import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import API from "./api";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
-import useSessionStorage from "../hooks/useSessionStorage";
+
 const initialState = {
   users: [],
   isLoading: false,
@@ -13,37 +13,14 @@ const initialState = {
 const token = Cookies.get("token");
 
 export const getUsers = createAsyncThunk(
-  "user/getUsers",
+  "user/get-users",
   async (payload, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:3000/api/v1/getUsers", {
+      const res = await axios.get("http://localhost:8080/api/users", {
         headers: {
-          token: `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`,
         },
       });
-      console.log(res.data);
-      return res.data.users;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
-
-export const updateRoleUser = createAsyncThunk(
-  "user/updateRoleUser",
-  async (payload, { rejectWithValue }) => {
-    console.log(payload);
-    try {
-      const res = await axios.put(
-        "http://localhost:3000/api/v1/users/updateRole",
-        payload,
-        {
-          headers: {
-            token: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(res.data);
       return res.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -52,16 +29,16 @@ export const updateRoleUser = createAsyncThunk(
 );
 
 export const updateUser = createAsyncThunk(
-  "user/updateUser",
-  async ({ id, data1 }, { rejectWithValue }) => {
+  "user/update-user",
+  async ({ id, data1: data }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/v1/updateUser/${id}`,
-        data1,
+        `http://localhost:8080/api/users/${id}`,
+        data,
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            token: `Bearer ${token}`,
+            "Authorization": `Bearer ${token}`,
           },
         }
       );
@@ -71,7 +48,7 @@ export const updateUser = createAsyncThunk(
         icon: "success",
         confirmButtonText: "OK",
       });
-      return response.data.user;
+      return response.data;
     } catch (error) {
       Swal.fire({
         title: "Error!",
@@ -85,11 +62,11 @@ export const updateUser = createAsyncThunk(
 );
 
 export const getUserById = createAsyncThunk(
-  "user/getUserById",
+  "user/get-user-by-id",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await API.get(`/api/v1/getUserById/${id}`);
-      return response.data.user;
+      const response = await API.get(`/api/users/${id}`);
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -138,20 +115,6 @@ const userSlice = createSlice({
       state.users = action.payload;
     },
     [getUsers.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-    [updateRoleUser.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [updateRoleUser.fulfilled]: (state, action) => {
-      state.isLoading = false;
-      console.log(action);
-      const { role, id } = action.meta.arg;
-      const index = state.users.findIndex((item) => item._id === id);
-      state.users[index].role = role;
-    },
-    [updateRoleUser.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },

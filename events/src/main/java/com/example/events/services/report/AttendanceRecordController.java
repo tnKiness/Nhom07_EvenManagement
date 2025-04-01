@@ -9,7 +9,7 @@ import com.example.events.services.report.business.AttendanceRecordService;
 import com.example.events.services.report.persistence.AttendanceRecordDto;
 
 @RestController
-@RequestMapping("/api/attendance-records")
+@RequestMapping("/api/attendance")
 public class AttendanceRecordController {
     
     @Autowired

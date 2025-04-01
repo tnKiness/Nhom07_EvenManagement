@@ -44,28 +44,28 @@ const Sidebar = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/otherManagement" className="nav-link text-white">
+                  <Link to="/attendance-list" className="nav-link text-white">
                     <ShoppingBagIcon className="h-5 w-5" />
-                    <p className="ml-2">Quản Lý Hóa Đơn</p>
+                    <p className="ml-2">Danh Sách Tham Gia</p>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/mess" className="nav-link text-white">
+                  <Link to="/notifications" className="nav-link text-white">
                     <ChatBubbleOvalLeftIcon className="h-5 w-5" />
-                    <p className="ml-2">Tin Nhắn</p>
+                    <p className="ml-2">Thông Báo</p>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/commentManagement" className="nav-link text-white">
+                  <Link to="/feedback-management" className="nav-link text-white">
                     <HomeIcon className="h-5 w-5" />
-                    <p className="ml-2">Bình Luận</p>
+                    <p className="ml-2">Phản Hồi</p>
                   </Link>
                 </li>
               
                 {auth.role === "ROLE_ADMIN" && (
                   <li className="nav-item">
                     <Link
-                      to="/AccountManagement"
+                      to="/account-management"
                       className="nav-link text-white"
                     >
                       <UserIcon className="h-5 w-5" />

@@ -40,6 +40,9 @@ public class UserMapper {
         if (userScorecard != null) {
             userDto.setScorecard(new ScorecardDto(userScorecard.getScore(), userScorecard.getLastUpdated().toString()));
         }
+
+        userDto.setId(user.getId());
+        userDto.setAvatar(user.getAvatar());
         return userDto;
     }
 
@@ -50,18 +53,26 @@ public class UserMapper {
                 userDto.getName(),
                 userDto.getEmail(),
                 userDto.getPhoneNumber(),
-                userDto.getPassword()
+                userDto.getPassword(),
+                userDto.getAvatar()
             );
 
             user.setNotifications(userDto.getNotifications().stream().map(notificationDto -> {
-                return new Notification(notificationDto.getMessage(), LocalDateTime.parse(notificationDto.getCreatedAt()));
+                Notification notification = new Notification(notificationDto.getMessage(), LocalDateTime.parse(notificationDto.getCreatedAt()));
+                notification.setId(notificationDto.getId());
+                return notification;
             }).collect(Collectors.toList()));
+
             ScorecardDto userDtoScorecard = userDto.getScorecard();
-            user.setScorecard(new Scorecard(userDtoScorecard.getScore(), LocalDateTime.parse(userDtoScorecard.getLastUpdated())));
+            Scorecard userScorecard = new Scorecard(userDtoScorecard.getScore(), LocalDateTime.parse(userDtoScorecard.getLastUpdated()));
+            userScorecard.setId(userDtoScorecard.getId());
+            user.setScorecard(userScorecard);
 
             return user;
         } else {
-            return new User(userDto.getUsername(), userDto.getPassword());
+            User user = new User(userDto.getUsername(), userDto.getPassword(), userDto.getAvatar());
+            user.setId(userDto.getId());
+            return user;
         }
     }
 }

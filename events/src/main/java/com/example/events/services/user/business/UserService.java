@@ -1,6 +1,5 @@
 package com.example.events.services.user.business;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,8 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.events.services.notification.business.NotificationService;
-import com.example.events.services.notification.persistence.Notification;
+import com.example.events.services.notification.business.NotificationMapper;
 import com.example.events.services.notification.persistence.NotificationDto;
 import com.example.events.services.scorecard.business.ScorecardService;
 import com.example.events.services.scorecard.persistence.Scorecard;
@@ -33,7 +31,7 @@ public class UserService {
     private ScorecardService scorecardService;
 
     @Autowired
-    private NotificationService notificationService;
+    private NotificationMapper notificationMapper;
 
     public UserDto addUser(UserDto userDto) {
         User user = userMapper.toEntity(userDto);
@@ -49,9 +47,7 @@ public class UserService {
 
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
-        return users.stream().map(user -> {
-            return userMapper.toDto(user);
-        }).collect(Collectors.toList());
+        return users.stream().map(userMapper::toDto).collect(Collectors.toList());
     }
 
     public UserDto getUserById(String id) {
@@ -101,20 +97,11 @@ public class UserService {
         return users.stream().map(userMapper::toDto).collect(Collectors.toList());
     }
 
-    public void massNotifyUsers(String notificationId) {
+    public void massNotifyUsers(NotificationDto notificationDto) {
         List<User> users = userRepository.findAll();
-        NotificationDto notificationDto = notificationService.getNotificationById(notificationId);
-        
         users.forEach(user -> {
-            user.getNotifications().add(new Notification(notificationDto.getMessage(), LocalDateTime.parse(notificationDto.getCreatedAt())));
+            user.getNotifications().add(notificationMapper.toEntity(notificationDto));
             userRepository.save(user);
         });
-    }
-
-    public List<NotificationDto> getUserNotifications(String id) {
-        User user = userRepository.findById(id).orElse(null);
-        return user.getNotifications().stream().map(notification -> {
-            return new NotificationDto(notification.getMessage(), notification.getCreatedAt().toString());
-        }).collect(Collectors.toList());
     }
 }

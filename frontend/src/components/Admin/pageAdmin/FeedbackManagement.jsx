@@ -1,4 +1,3 @@
-
 import {
   TrashIcon,
 } from "@heroicons/react/24/solid";
@@ -6,34 +5,38 @@ import { CardBody, Button, Card, CardHeader, Typography } from "@material-tailwi
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "../cruds/loading.css";
-import { getComment } from "../../../redux/commentSlice";
+import { getFeedback } from "../../../redux/feedbackSlice";
+import { getUsers } from "../../../redux/userSlice";
+import { getEvent } from "../../../redux/eventSlice";
+
 const TABLE_HEAD = [
   "id",
-  "Tên",
-  "Tên vắc-xin",
+  "Tên sinh viên",
+  "Tên sự kiện",
   "Nội dung",
   "Ngày đăng",
   "",
 ];
-const CommentManagement = () => {
-  const dispatch = useDispatch();
 
-  const comment = useSelector((state) => state.comment.comment);
-  console.log(comment);
+const FeedbackManagement = () => {
+  const dispatch = useDispatch();
+  const feedback = useSelector((state) => state.feedback.feedback);
+  const users = useSelector((state) => state.user.users || []);
+  const event = useSelector((state) => state.event.event);
+
   useEffect(() => {
-    dispatch(getComment());
+    dispatch(getFeedback());
+    dispatch(getUsers());
+    dispatch(getEvent());
   }, [dispatch]);
+
   return (
     <div className="content-wrapper">
-
       <Card className="ml-2 w-full">
         <CardHeader floated={false} shadow={false} className="content-header rounded-none">
           <div className="mb-12 flex flex-col justify-between gap-8 md:flex-row md:items-center">
             <div className="font-bold mt-7 text-2xl ml-6">
-              <h1>Quản Lý Bình Luận</h1>
-            </div>
-            <div className="flex w-full shrink-0 gap-2 md:w-max mt-10 mr-3">
-              
+              <h1>Quản Lý Phản Hồi Và Bình Luận</h1>
             </div>
           </div>
         </CardHeader>
@@ -58,23 +61,23 @@ const CommentManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {comment.length > 0 &&
-                comment.map(
-                  ({ _id, createdAt, user_id, vaccine_id, content }, index) => {
-                    const isLast = index === comment.length - 1;
+              {feedback.length > 0 &&
+                feedback.map(
+                  ({ id, userId, eventId, content, createdAt }, index) => {
+                    const isLast = index === feedback.length - 1;
                     const classes = isLast
                       ? "p-4"
                       : "p-4 border-b border-blue-gray-50";
 
                     return (
-                      <tr key={_id}>
+                      <tr key={id}>
                         <td className={classes}>
                           <Typography
                             variant="small"
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {_id}
+                            {id}
                           </Typography>
                         </td>
                         <td className={classes}>
@@ -83,7 +86,7 @@ const CommentManagement = () => {
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {user_id?.username}
+                            {users.find((user) => user.id === userId)?.name}
                           </Typography>
                         </td>
                         <td className={classes}>
@@ -92,7 +95,7 @@ const CommentManagement = () => {
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {vaccine_id?.name}
+                            {event.find((e) => e.id === eventId)?.name}
                           </Typography>
                         </td>
                         <td className={classes}>
@@ -115,38 +118,6 @@ const CommentManagement = () => {
                         </td>
 
                         <td className={classes}>
-                          {/* <Button
-                            onClick={() => {
-                              Swal.fire({
-                                title: "Update Danh mục",
-                                html: `
-                          <input
-                            id="slug"
-                            class="swal2-input"
-                            placeholder="Slug"
-                          >
-                          <br />
-                        <input
-                            id="name"
-                            class="swal2-input"
-                            placeholder="Tên Danh Mục"
-                            type="text"
-                          >
-                        
-                        `,
-                                showCancelButton: true,
-                                confirmButtonText: "Cập Nhật",
-                                cancelButtonText: "Hủy",
-                                preConfirm: () => {},
-                              });
-                            }}
-                            className="inline-flex items-center gap-2 justify-center px-8 py-4 text-white bg-blue-500 rounded-sm h-[50px] w-[50px] mr-2"
-                          >
-                            <span>
-                              <PencilSquareIcon className="h-4 w-4" />
-                            </span>
-                            <span>Sửa</span>
-                          </Button> */}
                           <Button className="inline-flex items-center gap-2 justify-center px-8 py-4 text-white bg-red-500 rounded-lg h-[50px] w-[50px]">
                             <span>
                               <TrashIcon className="h-4 w-4" />
@@ -166,4 +137,4 @@ const CommentManagement = () => {
   );
 };
 
-export default CommentManagement;
+export default FeedbackManagement;

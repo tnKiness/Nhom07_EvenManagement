@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getEventById } from "../redux/eventSlice";
 import axios from "axios";
 import {
-  addComment,
-  deleteCommentByAuthor,
-  getCommentByVaccineId,
-} from "../redux/commentSlice";
+  addFeedback,
+  // deleteCommentByAuthor,
+  getFeedbackByEventId,
+} from "../redux/feedbackSlice";
 import { addToCart } from "../redux/cartSlice";
 import Footer from "../components/post/Footer";
 import Swal from "sweetalert2";
@@ -34,7 +34,7 @@ function VaccinesDetail() {
       vaccine_id: id,
       content: comment,
     };
-    dispatch(addComment(data));
+    dispatch(addFeedback(data));
     }
 }
   const handleDeleteComment = (id) => {
@@ -42,7 +42,7 @@ function VaccinesDetail() {
   };
   useEffect(() => {
     dispatch(getEventById(id));
-    dispatch(getCommentByVaccineId(id));
+    dispatch(getFeedbackByEventId(id));
   }, [id, dispatch, commentList.length]);
 
   const handleSelectSize = (size) => {

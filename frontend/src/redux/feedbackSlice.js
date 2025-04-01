@@ -4,19 +4,19 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const initialState = {
-  comment: [],
+  feedback: [],
   isLoading: false,
   error: null,
 };
 
 const token = Cookies.get("token");
 
-export const addComment = createAsyncThunk(
-  "comment/addComment",
+export const addFeedback = createAsyncThunk(
+  "feedback/add-feedback",
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/comment/addComment",
+        "http://localhost:8080/api/feedback",
         payload,
         {
           headers: {
@@ -29,7 +29,7 @@ export const addComment = createAsyncThunk(
         icon: "success",
         text: "Thêm bình luận thành công",
       });
-      return res.data.comment;
+      return res.data;
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -42,12 +42,12 @@ export const addComment = createAsyncThunk(
   }
 );
 
-export const getComment = createAsyncThunk(
-  "comment/getComment",
+export const getFeedback = createAsyncThunk(
+  "feedback/get-feedback",
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.get(
-        "http://localhost:3000/api/v1/comment/getComment",
+        "http://localhost:8080/api/feedback",
         {
           headers: {
             "Content-Type": "application/json",
@@ -55,19 +55,19 @@ export const getComment = createAsyncThunk(
           },
         }
       );
-      return res.data.comment;
+      return res.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
   }
 );
 
-export const getCommentByVaccineId = createAsyncThunk(
-  "comment/getCommentByVaccineId",
+export const getFeedbackByEventId = createAsyncThunk(
+  "feedback/get-feedback-by-event-id",
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/v1/comment/getCommentByVaccineId/${payload}`,
+        `http://localhost:8080/api/feedback/${payload}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -75,89 +75,54 @@ export const getCommentByVaccineId = createAsyncThunk(
           },
         }
       );
-      console.log(res.data.comment);
-      return res.data.comment;
+      return res.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
-export const deleteCommentByAuthor = createAsyncThunk(
-  "comment/deleteCommentByAuthor",
-  async (payload, { rejectWithValue }) => {
-    try {
-      const res = await axios.delete(
-        "http://localhost:3000/api/v1/comment/deleteCommentByAuthor/" + payload
-      );
-      Swal.fire({
-        icon: "success",
-        text: "Xóa bình luận thành công",
-      });
-      return res.data.comment._id;
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Lỗi",
-      });
       return rejectWithValue(error.response.data);
     }
   }
 );
 
-const commentSlice = createSlice({
-  name: "comment",
+const feedbackSlice = createSlice({
+  name: "feedback",
   initialState,
   reducers: {},
   extraReducers: {
-    [addComment.pending]: (state) => {
+    [addFeedback.pending]: (state) => {
       state.isLoading = true;
     },
-    [addComment.fulfilled]: (state, action) => {
+    [addFeedback.fulfilled]: (state, action) => {
       state.isLoading = false;
       if (action.payload) {
         state.comment.push(action.payload);
       }
     },
-    [addComment.rejected]: (state, action) => {
+    [addFeedback.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
-    [getComment.pending]: (state) => {
+    [getFeedback.pending]: (state) => {
       state.isLoading = true;
     },
-    [getComment.fulfilled]: (state, action) => {
+    [getFeedback.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.comment = action.payload;
     },
-    [getComment.rejected]: (state, action) => {
+    [getFeedback.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
-    [getCommentByVaccineId.pending]: (state) => {
+    [getFeedbackByEventId.pending]: (state) => {
       state.isLoading = true;
     },
-    [getCommentByVaccineId.fulfilled]: (state, action) => {
+    [getFeedbackByEventId.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.comment = action.payload;
     },
-    [getCommentByVaccineId.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-    [deleteCommentByAuthor.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [deleteCommentByAuthor.fulfilled]: (state, action) => {
-      state.isLoading = false;
-      state.comment = state.comment.filter(
-        (comment) => comment._id !== action.payload
-      );
-    },
-    [deleteCommentByAuthor.rejected]: (state, action) => {
+    [getFeedbackByEventId.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
   },
 });
 
-export default commentSlice.reducer;
+export default feedbackSlice.reducer;

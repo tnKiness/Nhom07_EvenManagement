@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.events.services.notification.persistence.NotificationDto;
 import com.example.events.services.user.business.UserService;
 import com.example.events.services.user.persistence.UserDto;
 
@@ -21,27 +22,27 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserDto getUserById(@PathVariable String id) {
+    public UserDto getUserById(@PathVariable("id") String id) {
         return userService.getUserById(id);
     }
 
     @PutMapping("/{id}")
-    public UserDto updateUser(@PathVariable String id, @RequestBody UserDto userDto) {
+    public UserDto updateUser(@PathVariable("id") String id, @RequestBody UserDto userDto) {
         return userService.updateUser(id, userDto);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable String id) {
+    public void deleteUser(@PathVariable("id") String id) {
         userService.deleteUser(id);
     }
 
     @GetMapping("/search-by-username/{username}")
-    public List<UserDto> searchUsersByUsername(@PathVariable String username) {
+    public List<UserDto> searchUsersByUsername(@PathVariable("username") String username) {
         return userService.getUsersByUsernameContaining(username);
     }
 
     @PostMapping("/mass-notify")
-    public void massNotifyUsers(@RequestBody String notificationId) {
-        userService.massNotifyUsers(notificationId);
+    public void massNotifyUsers(@RequestBody NotificationDto notificationDto) {
+        userService.massNotifyUsers(notificationDto);
     }
 }

@@ -8,6 +8,7 @@ public class ScorecardDto {
     public ScorecardDto() { }
 
     public ScorecardDto(int score, String lastUpdated) {
+        this.id = "";
         this.score = score;
         this.lastUpdated = lastUpdated;
     }

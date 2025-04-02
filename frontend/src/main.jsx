@@ -11,6 +11,7 @@ import SignIn from "./pages/SignIn.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import AccountManagement from "./components/Admin/pageAdmin/AccountManagement.jsx";
+import AddAccount from "./components/Admin/cruds/AddAccount.jsx";
 import EventManagement from "./components/Admin/pageAdmin/EventManagement.jsx";
 import AddEvent from "./components/Admin/cruds/AddEvent.jsx";
 import EditEvent from "./components/Admin/cruds/EditEvent.jsx";
@@ -31,6 +32,7 @@ import MyOrder from "./pages/MyOrder.jsx";
 import MyOrderDetail from "./pages/MyOrderDetail.jsx";
 import CategoryPage from "./pages/CategoryPage.jsx";
 import Favatie from "./pages/favatie.jsx";
+
 
 const router = createBrowserRouter([
   {
@@ -69,7 +71,7 @@ const router = createBrowserRouter([
         element: <UpdateMain></UpdateMain>,
       },
       {
-        path: "/listEvents",
+        path: "/list-events",
         element: <ListEvents></ListEvents>,
       },
       {
@@ -120,6 +122,10 @@ const router = createBrowserRouter([
       {
         path: "/account-management",
         element: <AccountManagement></AccountManagement>,
+      },
+      {
+        path: "/add-account",
+        element: <AddAccount></AddAccount>
       },
       {
         path: "/add-category",

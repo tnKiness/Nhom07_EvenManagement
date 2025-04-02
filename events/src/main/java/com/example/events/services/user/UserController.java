@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.events.services.notification.persistence.NotificationDto;
 import com.example.events.services.user.business.UserService;
@@ -16,6 +17,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @PostMapping(consumes = { "multipart/form-data" })
+    public UserDto addUser(@RequestPart("avatar") MultipartFile avatar, @RequestPart("data") UserDto userDto) {
+        return userService.addUser(avatar, userDto);
+    }
+
     @GetMapping
     public List<UserDto> getAllUsers() {
         return userService.getAllUsers();
@@ -27,8 +33,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public UserDto updateUser(@PathVariable("id") String id, @RequestBody UserDto userDto) {
-        return userService.updateUser(id, userDto);
+    public UserDto updateUser(@PathVariable("id") String id, @RequestPart("avatar") MultipartFile avatar, @RequestPart("data") UserDto userDto) {
+        return userService.updateUser(id, avatar, userDto);
     }
 
     @DeleteMapping("/{id}")

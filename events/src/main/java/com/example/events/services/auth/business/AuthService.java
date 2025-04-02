@@ -9,24 +9,15 @@ import org.springframework.stereotype.Service;
 
 import com.example.events.services.auth.persistence.LoginDto;
 import com.example.events.services.auth.security.JwtTokenProvider;
-import com.example.events.services.user.business.UserService;
-import com.example.events.services.user.persistence.UserDto;
 
 @Service
 public class AuthService {
-    
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
-
-    public UserDto signUp(UserDto userDto) {
-        return userService.addUser(userDto);
-    }
 
     public String signIn(LoginDto loginDto) {
         Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(

@@ -80,7 +80,6 @@ const AccountManagement = () => {
                   </span>
                 </div>
                 <div className="mb-2 h-14">
-                  {/* TODO: Tạo trang thêm tài khoản */}
                   <Link to="/add-account">
                     <Button className="flex items-center gap-1 rounded-md h-11 bg-blue-500 w-29 hover:bg-blue-600 text-md">
                       <PlusIcon className="h-7 w-7" />

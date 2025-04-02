@@ -71,7 +71,7 @@ const Header = () => {
           <div className="navbar-nav ms-auto py-0">
             <Link
               className="nav-link active"
-              to={"/listEvents"}
+              to={"/list-events"}
               onClick={scrollToEventList}
             >
               Sự Kiện
@@ -84,7 +84,16 @@ const Header = () => {
             </Link>
           </div>
           <ul className="nav-link flex items-center">
-            <p>{user?.username}</p>
+            <img 
+              className="w-[50px] rounded-full"
+              src={user 
+                ? (user?.avatar
+                  ? user.avatar
+                  : "https://i.pinimg.com/736x/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg")
+                : ""
+              }
+              alt=""
+            />
             <li className="dropdown">
               {user ? (
                 <a
@@ -106,7 +115,7 @@ const Header = () => {
                   <li className="dropdown-menu">
                     <a
                       className="dropdown-item"
-                      href={`/UpdateMain/${user._id}`}
+                      href={`/UpdateMain/${user.id}`}
                     >
                       Chỉnh Sửa Hồ Sơ
                     </a>

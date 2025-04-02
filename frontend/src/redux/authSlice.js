@@ -32,6 +32,17 @@ const authSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    registerStart: (state) => {
+      state.isLoading = true;
+    },
+    registerSuccess: (state, action) => {
+      state.isLoading = false;
+      state.currentUser = action.payload;
+    },
+    registerFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
     logOut: (state) => {
       state.currentUser = null;
       Cookies.remove("token");
@@ -70,6 +81,9 @@ const authSlice = createSlice({
 });
 
 export const {
+  registerStart,
+  registerSuccess,
+  registerFailure,
   loginStart,
   loginSuccess,
   loginFailure,

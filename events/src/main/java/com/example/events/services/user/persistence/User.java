@@ -1,6 +1,5 @@
 package com.example.events.services.user.persistence;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -52,9 +51,6 @@ public class User {
         this.password = password;
         this.avatar = avatar;
         this.role = UserRole.ROLE_USER;
-
-        this.notifications = new ArrayList<>();
-        this.scorecard = new Scorecard();
     }
 
     public String getId() {

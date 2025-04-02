@@ -1,7 +1,5 @@
 package com.example.events.services.user.business;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +11,7 @@ import com.example.events.services.scorecard.persistence.Scorecard;
 import com.example.events.services.scorecard.persistence.ScorecardDto;
 import com.example.events.services.user.persistence.User;
 import com.example.events.services.user.persistence.UserDto;
+import com.example.events.util.helper.DateTimeParser;
 
 @Component
 public class UserMapper {
@@ -24,9 +23,7 @@ public class UserMapper {
             user.getStudentId(),
             user.getName(),
             user.getEmail(),
-            user.getPhoneNumber(),
-            new ArrayList<NotificationDto>(),
-            new ScorecardDto()
+            user.getPhoneNumber()
         );
 
         List<Notification> userNotifications = user.getNotifications();
@@ -57,16 +54,20 @@ public class UserMapper {
                 userDto.getAvatar()
             );
 
-            user.setNotifications(userDto.getNotifications().stream().map(notificationDto -> {
-                Notification notification = new Notification(notificationDto.getMessage(), LocalDateTime.parse(notificationDto.getCreatedAt()));
-                notification.setId(notificationDto.getId());
-                return notification;
-            }).collect(Collectors.toList()));
+            if (userDto.getNotifications() != null) {
+                user.setNotifications(userDto.getNotifications().stream().map(notificationDto -> {
+                    Notification notification = new Notification(notificationDto.getMessage(), DateTimeParser.toLocalDateTime(notificationDto.getCreatedAt()));
+                    notification.setId(notificationDto.getId());
+                    return notification;
+                }).collect(Collectors.toList()));
+            }
 
-            ScorecardDto userDtoScorecard = userDto.getScorecard();
-            Scorecard userScorecard = new Scorecard(userDtoScorecard.getScore(), LocalDateTime.parse(userDtoScorecard.getLastUpdated()));
-            userScorecard.setId(userDtoScorecard.getId());
-            user.setScorecard(userScorecard);
+            if (userDto.getScorecard() != null) {
+                ScorecardDto userDtoScorecard = userDto.getScorecard();
+                Scorecard userScorecard = new Scorecard(userDtoScorecard.getScore(), DateTimeParser.toLocalDateTime(userDtoScorecard.getLastUpdated()));
+                userScorecard.setId(userDtoScorecard.getId());
+                user.setScorecard(userScorecard);
+            }
 
             return user;
         } else {

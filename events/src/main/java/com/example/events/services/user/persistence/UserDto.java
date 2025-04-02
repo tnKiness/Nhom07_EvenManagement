@@ -1,12 +1,17 @@
 package com.example.events.services.user.persistence;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.events.services.notification.persistence.NotificationDto;
 import com.example.events.services.scorecard.persistence.ScorecardDto;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserDto {
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String id;
+
     private String username;
     private String password;
     private String role;
@@ -21,7 +26,7 @@ public class UserDto {
     public UserDto() { }
 
     public UserDto(String username, String password, String role, String studentId, String name, String email, 
-        String phoneNumber, List<NotificationDto> notifications, ScorecardDto scorecard) {
+        String phoneNumber) {
         
         this.id = "";
         this.username = username;
@@ -32,8 +37,8 @@ public class UserDto {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.avatar = "";
-        this.notifications = notifications;
-        this.scorecard = scorecard;
+        this.notifications = new ArrayList<>();
+        this.scorecard = new ScorecardDto();
     }
 
     public String getId() {

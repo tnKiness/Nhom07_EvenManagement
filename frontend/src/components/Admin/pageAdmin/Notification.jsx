@@ -10,16 +10,18 @@ import {
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 import {
   getNotification,
 } from "../../../redux/notificationSlice";
 import "../cruds/loading.css";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const TABLE_HEAD = ["id", "Thông Báo", "Ngày Tạo", ""];
 
 const Notification = () => {
-  const notification = useSelector((state) => state.notification.notification);
+  const notifications = useSelector((state) => state.notification.notification);
   const isLoading = useSelector((state) => state.notification.isLoading);
   const dispatch = useDispatch();
   // Tạo state để lưu từ khóa tìm kiếm
@@ -29,6 +31,25 @@ const Notification = () => {
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
+
+  const handleMassNotify = async (id) => {
+    const notification = notifications.find((notification) => notification.id === id);
+    try {
+      await axios.post("http://localhost:8080/api/users/mass-notify", notification);
+      Swal.fire({
+        icon: "success",
+        title: "Gửi thông báo thành công",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi",
+        text: error.response.data.message,
+      });
+    }
+  }
 
   useEffect(() => {
     dispatch(getNotification());
@@ -88,7 +109,7 @@ const Notification = () => {
           <CardBody className="px-0 container-fluid">
             <table className="w-full min-w-max table-auto text-left">
               <thead>
-                <tr className=" bg-blue-800 text-white">
+                <tr className="bg-blue-800 text-white">
                   {TABLE_HEAD.map((head) => (
                     <th
                       key={head}
@@ -106,12 +127,12 @@ const Notification = () => {
                 </tr>
               </thead>
               <tbody>
-                {notification.length > 0 &&
-                  notification.filter((item) =>
+                {notifications.length > 0 &&
+                  notifications.filter((item) =>
                     item.message.toLowerCase().includes(searchTerm.toLowerCase())
                   ).map(
                     ({ id, message, createdAt }, index) => {
-                      const isLast = index === notification.length - 1;
+                      const isLast = index === notifications.length - 1;
                       const classes = isLast
                         ? "p-4"
                         : "p-4 border-b border-blue-gray-50";
@@ -145,12 +166,12 @@ const Notification = () => {
                             </Typography>
                           </td>
                           <td className={classes}>
-                            {/* <Button
-                              onClick={() => handleDelete(id)}
-                              className="inline-flex items-center gap-2 justify-center px-8 py-4 text-white bg-blue-500 rounded-lg h-[50px] w-[50px]"
+                            <Button
+                              onClick={() => handleMassNotify(id)}
+                              className="inline-flex items-center gap-2 justify-center px-8 py-4 text-white bg-blue-500 rounded-lg h-[50px] w-[130px]"
                             >
                               <span>Gửi tất cả</span>
-                            </Button> */}
+                            </Button>
                           </td>
                         </tr>
                       );

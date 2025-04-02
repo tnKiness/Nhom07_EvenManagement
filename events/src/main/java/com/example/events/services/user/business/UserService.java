@@ -1,18 +1,20 @@
 package com.example.events.services.user.business;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.example.events.services.cloudinary.CloudinaryService;
 import com.example.events.services.notification.business.NotificationMapper;
 import com.example.events.services.notification.persistence.NotificationDto;
-import com.example.events.services.scorecard.business.ScorecardService;
 import com.example.events.services.scorecard.persistence.Scorecard;
-import com.example.events.services.scorecard.persistence.ScorecardDto;
+import com.example.events.services.scorecard.persistence.ScorecardRepository;
 import com.example.events.services.user.persistence.User;
 import com.example.events.services.user.persistence.UserDto;
 import com.example.events.services.user.persistence.UserRepository;
@@ -28,20 +30,40 @@ public class UserService {
     private UserMapper userMapper;
 
     @Autowired
-    private ScorecardService scorecardService;
+    private ScorecardRepository scorecardRepository;
 
     @Autowired
     private NotificationMapper notificationMapper;
 
-    public UserDto addUser(UserDto userDto) {
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
+    public UserDto addUser(MultipartFile avatar, UserDto userDto) {
+        User existingUser = userRepository.findByUsername(userDto.getUsername()).orElse(null);
+        if (existingUser != null) {
+            throw new RuntimeException("Student ID already exists");
+        }
+
+        if (avatar != null) {
+            Map<?, ?> uploadResult = cloudinaryService.upload(avatar);
+            System.out.println(uploadResult);
+            userDto.setAvatar(uploadResult.get("url").toString());
+        }
+
         User user = userMapper.toEntity(userDto);
         user.setPassword(new BCryptPasswordEncoder().encode(userDto.getPassword()));
-        
-        if (userDto.getRole().equals("ROLE_USER")) {
-            Scorecard userScorecard = user.getScorecard();
-            scorecardService.addScorecard(new ScorecardDto(userScorecard.getScore(), userScorecard.getLastUpdated().toString()));
+
+        if (userDto.getRole().equals("ROLE_ADMIN")) {
+            userRepository.save(user);
+            return userDto;
         }
+
+        Scorecard userScorecard = new Scorecard();
+        scorecardRepository.save(userScorecard);
+        user.setScorecard(userScorecard);
+
         userRepository.save(user);
+
         return userDto;
     }
 
@@ -55,7 +77,7 @@ public class UserService {
         return userMapper.toDto(user);
     }
 
-    public UserDto updateUser(String id, UserDto userDto) {
+    public UserDto updateUser(String id, MultipartFile avatar, UserDto userDto) {
         Optional<User> userDb = userRepository.findById(id);
 
         if (userDb.isPresent()) {
@@ -69,6 +91,11 @@ public class UserService {
             updatedUser.setEmail(userDto.getEmail());
             updatedUser.setPhoneNumber(userDto.getPhoneNumber());
 
+            if (avatar != null) {
+                Map<?, ?> uploadResult = cloudinaryService.upload(avatar);
+                updatedUser.setAvatar((String)uploadResult.get("secure_url"));
+            }
+
             userRepository.save(updatedUser);
             return userDto;
         } else {
@@ -80,7 +107,7 @@ public class UserService {
         Optional<User> userDb = userRepository.findById(id);
 
         if (userDb.isPresent()) {
-            scorecardService.deleteScorecard(id);
+            scorecardRepository.deleteById(id);
             userRepository.delete(userDb.get());
         } else {
             throw new RuntimeException("User not found with id: " + id);
@@ -100,8 +127,14 @@ public class UserService {
     public void massNotifyUsers(NotificationDto notificationDto) {
         List<User> users = userRepository.findAll();
         users.forEach(user -> {
-            user.getNotifications().add(notificationMapper.toEntity(notificationDto));
-            userRepository.save(user);
+            if (!user.getRole().equals(UserRole.ROLE_ADMIN)) {
+                if (user.getNotifications() != null) {
+                    user.getNotifications().add(notificationMapper.toEntity(notificationDto));
+                } else {
+                    user.setNotifications(List.of(notificationMapper.toEntity(notificationDto)));
+                }
+                userRepository.save(user);
+            }
         });
     }
 }

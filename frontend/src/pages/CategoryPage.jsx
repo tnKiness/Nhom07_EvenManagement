@@ -26,7 +26,7 @@ const CategoryPage = () => {
           vaccineList?.map((item) => {
             return (
               <div key={item._id}>
-                <Link to={`/vacxindetail/${item._id}`}>
+                <Link to={`/event-detail/${item.id}`}>
                   <div
                     className="max-w-sm mb-5 wow zoomIn bg-white dark:bg-gray-800 dark:border-gray-700"
                     data-wow-delay="0.9s"

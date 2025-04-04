@@ -48,4 +48,13 @@ public class FeedbackService {
         List<Feedback> feedbacks = feedbackRepository.findByEventId(eventId);
         return feedbacks.stream().map(feedbackMapper::toDto).collect(Collectors.toList());
     }
+
+    public void deleteFeedback(String id) {
+        Feedback feedback = feedbackRepository.findById(id).orElse(null);
+        if (feedback != null) {
+            feedbackRepository.delete(feedback);
+        } else {
+            throw new RuntimeException("Feedback not found with id: " + id);
+        }
+    }
 }

@@ -61,7 +61,9 @@ const authSlice = createSlice({
       const others = JSON.parse(atob(token.split('.')[1]));
       const user = JSON.stringify({
         username: others.sub,
-        role: others.role
+        id: others.id,
+        role: others.role,
+        avatar: others.avatar,
       });
 
       Cookies.set("token", token);

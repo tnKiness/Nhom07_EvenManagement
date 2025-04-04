@@ -11,20 +11,19 @@ public class AttendanceRecord {
     @Id
     private String id;
 
-    private String studentId;
-    private String studentName;
+    private String userId;
     private String eventId;
+    private String eventName;
     private LocalDateTime registeredAt;
     private AttendanceStatus attendanceStatus;
 
     public AttendanceRecord() { }
 
-    public AttendanceRecord(String studentId, String studentName, String eventId, AttendanceStatus attendanceStatus) {
-
-        this.studentId = studentId;
-        this.studentName = studentName;
+    public AttendanceRecord(String userId, String eventId, String eventName, LocalDateTime registeredAt, AttendanceStatus attendanceStatus) {
+        this.userId = userId;
         this.eventId = eventId;
-        this.registeredAt = LocalDateTime.now();
+        this.eventName = eventName;
+        this.registeredAt = registeredAt;
         this.attendanceStatus = attendanceStatus;
     }
 
@@ -36,20 +35,12 @@ public class AttendanceRecord {
         this.id = id;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
-
-    public String getStudentName() {
-        return studentName;
-    }
-
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getEventId() {
@@ -60,6 +51,14 @@ public class AttendanceRecord {
         this.eventId = eventId;
     }
     
+    public String getEventName() {
+        return eventName;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+
     public LocalDateTime getRegisteredAt() {
         return registeredAt;
     }
@@ -78,7 +77,7 @@ public class AttendanceRecord {
 
     @Override
     public String toString() {
-        return "AttendanceRecord [id=" + id + ", studentId=" + studentId + ", studentName=" + studentName + ", eventId="
-                + eventId + ", registeredAt=" + registeredAt + ", attendanceStatus=" + attendanceStatus + "]";
+        return "AttendanceRecord [id=" + id + ", userId=" + userId + ", eventId=" + eventId + ", eventName=" + eventName
+                + ", registeredAt=" + registeredAt + ", attendanceStatus=" + attendanceStatus + "]";
     }
 }

@@ -72,7 +72,7 @@ function Activities() {
           {filteredEvents.length > 0 ? (
             filteredEvents.map((item) => (
               <div className="col-md-3 mb-4" key={item.id}>
-                <Link to={`/vacxindetail/${item.id}`} className="text-decoration-none">
+                <Link to={`/event-detail/${item.id}`} className="text-decoration-none">
                   <div className="card h-100 mx-auto wow zoomIn bg-white dark:bg-gray-800 dark:border-gray-700" data-wow-delay="0.9s" style={{ border: '1px solid #ddd', borderRadius: '5px', overflow: 'hidden' }}>
                     <img src={item.image} alt={item.name} className="card-img-top" style={{ objectFit: 'cover', height: '200px' }} />
                     <div className="card-body flex-column justify-content-center align-items-center text-center">

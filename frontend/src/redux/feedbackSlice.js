@@ -21,7 +21,7 @@ export const addFeedback = createAsyncThunk(
         {
           headers: {
             "Content-Type": "application/json",
-            token: `Bearer ${token}`,
+            "Authorization": `Bearer ${token}`,
           },
         }
       );
@@ -51,7 +51,7 @@ export const getFeedback = createAsyncThunk(
         {
           headers: {
             "Content-Type": "application/json",
-            token: `Bearer ${token}`,
+            "Authorization": `Bearer ${token}`,
           },
         }
       );
@@ -67,16 +67,35 @@ export const getFeedbackByEventId = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.get(
-        `http://localhost:8080/api/feedback/${payload}`,
+        `http://localhost:8080/api/feedback?eventId=${payload}`,
         {
           headers: {
             "Content-Type": "application/json",
-            token: `Bearer ${token}`,
           },
         }
       );
       return res.data;
     } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const deleteFeedbackById = createAsyncThunk(
+  "feedback/delete-feedback-by-id",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const res = await axios.delete(`http://localhost:8080/api/feedback/${payload}`);
+      Swal.fire({
+        icon: "success",
+        text: "Xóa bình luận thành công",
+      });
+      return res.data.feedback.id;
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi",
+      });
       return rejectWithValue(error.response.data);
     }
   }
@@ -93,7 +112,7 @@ const feedbackSlice = createSlice({
     [addFeedback.fulfilled]: (state, action) => {
       state.isLoading = false;
       if (action.payload) {
-        state.comment.push(action.payload);
+        state.feedback.push(action.payload);
       }
     },
     [addFeedback.rejected]: (state, action) => {
@@ -105,7 +124,7 @@ const feedbackSlice = createSlice({
     },
     [getFeedback.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.comment = action.payload;
+      state.feedback = action.payload;
     },
     [getFeedback.rejected]: (state, action) => {
       state.isLoading = false;
@@ -116,13 +135,26 @@ const feedbackSlice = createSlice({
     },
     [getFeedbackByEventId.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.comment = action.payload;
+      state.feedback = action.payload;
     },
     [getFeedbackByEventId.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
-  },
+    [deleteFeedbackById.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [deleteFeedbackById.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.feedback = state.feedback.filter(
+        (feedback) => feedback.id !== action.payload
+      );
+    },
+    [deleteFeedbackById.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+  }
 });
 
 export default feedbackSlice.reducer;

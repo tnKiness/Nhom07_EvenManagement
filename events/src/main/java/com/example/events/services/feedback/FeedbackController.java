@@ -26,7 +26,12 @@ public class FeedbackController {
     }
 
     @GetMapping("/{eventId}")
-    public List<FeedbackDto> getFeedbacksByEventId(@PathVariable String eventId) {
+    public List<FeedbackDto> getFeedbacksByEventId(@PathVariable("eventId") String eventId) {
         return feedbackService.getFeedbacksByEventId(eventId);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteFeedback(@PathVariable("id") String id) {
+        feedbackService.deleteFeedback(id);
     }
 }

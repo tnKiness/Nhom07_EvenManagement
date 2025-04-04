@@ -26,17 +26,22 @@ public class AttendanceRecordController {
     }
 
     @GetMapping("/{id}")
-    public AttendanceRecordDto getAttendanceRecordById(@RequestParam String id) {
+    public AttendanceRecordDto getAttendanceRecordById(@PathVariable("id") String id) {
         return attendanceRecordService.getAttendanceRecordById(id);
     }
 
     @PutMapping("/{id}")
-    public AttendanceRecordDto updateAttendanceRecord(@RequestParam String id, @RequestBody AttendanceRecordDto attendanceRecordDto) {
+    public AttendanceRecordDto updateAttendanceRecord(@PathVariable("id") String id, @RequestBody AttendanceRecordDto attendanceRecordDto) {
         return attendanceRecordService.updateAttendanceRecord(id, attendanceRecordDto);
     }
 
     @GetMapping("/event/{eventId}")
-    public List<AttendanceRecordDto> getAttendanceRecordsByEventId(@RequestParam String eventId) {
+    public List<AttendanceRecordDto> getAttendanceRecordsByEventId(@PathVariable("eventId") String eventId) {
         return attendanceRecordService.getAttendanceRecordsByEventId(eventId);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<AttendanceRecordDto> getAttendanceRecordsByUserId(@PathVariable("userId") String userId) {
+        return attendanceRecordService.getAttendanceRecordsByUserId(userId);
     }
 }

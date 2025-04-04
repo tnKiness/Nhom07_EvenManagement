@@ -49,6 +49,20 @@ export const getAttendanceById = createAsyncThunk(
   }
 );
 
+export const getAttendanceByEventId = createAsyncThunk(
+  "attendance/get-attendance-by-event-id",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8080/api/attendance/event/${payload}`
+      );
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const addAttendance = createAsyncThunk(
   "attendance/add-attendance",
   async (payload, { rejectWithValue }) => {
@@ -63,7 +77,7 @@ export const addAttendance = createAsyncThunk(
         }
       );
       localStorage.clear();
-      window.location.href = "/othersuccess";
+      window.location.href = "/register-success";
       return res.data;
     } catch (error) {
       Swal.fire({
@@ -112,6 +126,17 @@ const attendanceSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(getAttendanceById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.other = action.payload;
+      })
+      .addCase(getAttendanceByEventId.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAttendanceByEventId.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(getAttendanceByEventId.fulfilled, (state, action) => {
         state.isLoading = false;
         state.other = action.payload;
       })

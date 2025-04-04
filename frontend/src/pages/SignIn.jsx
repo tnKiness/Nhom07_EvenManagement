@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -29,7 +30,12 @@ const SignIn = () => {
     try {
       dispatch(login(data));
     } catch (error) {
-      console.log(error)
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi!",
+        text: "Đăng nhập không thành công",
+        time: 1500,
+      });
     }
   };
   

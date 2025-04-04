@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.events.services.category.business.CategoryDto;
 import com.example.events.services.category.business.CategoryService;
+import com.example.events.services.category.persistence.CategoryDto;
 
 @RestController
 @RequestMapping("/api/category")

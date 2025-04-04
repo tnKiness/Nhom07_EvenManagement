@@ -1,4 +1,4 @@
-package com.example.events.services.category.business;
+package com.example.events.services.category.persistence;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

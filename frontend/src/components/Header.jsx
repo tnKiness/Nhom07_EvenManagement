@@ -76,7 +76,7 @@ const Header = () => {
             >
               Sự Kiện
             </Link>
-            <Link className="nav-link active" to={"/cart"}>
+            <Link className="nav-link active" to={"/attendance-history"}>
               Lịch Sử Tham Gia
             </Link>
             <Link className="nav-link active" to={""}>
@@ -115,7 +115,7 @@ const Header = () => {
                   <li className="dropdown-menu">
                     <a
                       className="dropdown-item"
-                      href={`/UpdateMain/${user.id}`}
+                      href={`/update-info/${user.id}`}
                     >
                       Chỉnh Sửa Hồ Sơ
                     </a>

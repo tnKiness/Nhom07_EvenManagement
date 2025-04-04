@@ -5,13 +5,9 @@ import java.util.List;
 
 import com.example.events.services.notification.persistence.NotificationDto;
 import com.example.events.services.scorecard.persistence.ScorecardDto;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserDto {
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String id;
-
     private String username;
     private String password;
     private String role;

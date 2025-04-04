@@ -84,7 +84,6 @@ public class UserService {
             User updatedUser = userDb.get();
 
             updatedUser.setUsername(userDto.getUsername());
-            updatedUser.setPassword(new BCryptPasswordEncoder().encode(userDto.getPassword()));
             updatedUser.setRole(UserRole.fromValue(userDto.getRole()));
             updatedUser.setStudentId(userDto.getStudentId());
             updatedUser.setName(userDto.getName());
@@ -115,8 +114,13 @@ public class UserService {
     }
 
     public UserDto getUserByUsername(String username) {
-        User user = userRepository.findByUsername(username).orElse(null);
-        return userMapper.toDto(user);
+        Optional<User> userDb = userRepository.findByUsername(username);
+
+        if (userDb.isPresent()) {
+            return userMapper.toDto(userDb.get());
+        } else {
+            throw new RuntimeException("User not found with username: " + username);
+        }
     }
 
     public List<UserDto> getUsersByUsernameContaining(String username) {

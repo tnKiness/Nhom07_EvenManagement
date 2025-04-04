@@ -17,22 +17,18 @@ import AddEvent from "./components/Admin/cruds/AddEvent.jsx";
 import EditEvent from "./components/Admin/cruds/EditEvent.jsx";
 import AddCategory from "./components/Admin/cruds/AddCategory.jsx";
 import UpdateMain from "./components/Admin/pageAdmin/UpdateMain.jsx";
-import VaccinesDetail from "./pages/VaccinesDetail.jsx";
-import Cart from "./pages/Cart.jsx";
+import EventDetail from "./pages/EventDetail.jsx";
 import AttendanceManagement from "./components/Admin/pageAdmin/AttendanceManagement.jsx";
 import FeedbackManagement from "./components/Admin/pageAdmin/FeedbackManagement.jsx";
 import Notification from "./components/Admin/pageAdmin/Notification.jsx";
 import AddNotification from "./components/Admin/cruds/AddNotification.jsx";
-import OtherSuccess from "./pages/OtherSuccess.jsx";
+import RegisterSuccess from "./pages/RegisterSuccess.jsx";
 import Dashboard from "./components/Admin/pageAdmin/Dashboard.jsx";
 import LayoutAdmin from "./components/LayoutAdmin.jsx";
 import CategoryMain from "./components/Admin/pageAdmin/CategoryMain.jsx";
 import ListEvents from "./pages/ListEvents.jsx";
-import MyOrder from "./pages/MyOrder.jsx";
-import MyOrderDetail from "./pages/MyOrderDetail.jsx";
+import AttendanceHistory from "./pages/AttendanceHistory.jsx";
 import CategoryPage from "./pages/CategoryPage.jsx";
-import Favatie from "./pages/favatie.jsx";
-
 
 const router = createBrowserRouter([
   {
@@ -43,12 +39,8 @@ const router = createBrowserRouter([
         element: <HomePage></HomePage>,
       },
       {
-        path:"/fava",
-        element:<Favatie></Favatie>
-      },
-      {
-        path: "/othersuccess",
-        element: <OtherSuccess></OtherSuccess>,
+        path: "/register-success",
+        element: <RegisterSuccess></RegisterSuccess>,
       },
       {
         path: "/forgot-password",
@@ -59,15 +51,11 @@ const router = createBrowserRouter([
         element: <ResetPassword></ResetPassword>,
       },
       {
-        path: "/cart",
-        element: <Cart></Cart>,
+        path: "/event-detail/:id",
+        element: <EventDetail></EventDetail>,
       },
       {
-        path: "/vacxindetail/:id",
-        element: <VaccinesDetail></VaccinesDetail>,
-      },
-      {
-        path: "/UpdateMain/:id",
+        path: "/update-info/:id",
         element: <UpdateMain></UpdateMain>,
       },
       {
@@ -79,12 +67,8 @@ const router = createBrowserRouter([
         element: <CategoryPage></CategoryPage>,
       },
       {
-        path: "/my-order",
-        element: <MyOrder />,
-      },
-      {
-        path: "/my-order-detail/:id",
-        element: <MyOrderDetail />,
+        path: "/attendance-history",
+        element: <AttendanceHistory />,
       },
     ],
   },

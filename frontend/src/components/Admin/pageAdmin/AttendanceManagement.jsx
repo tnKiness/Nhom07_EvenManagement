@@ -7,6 +7,7 @@ import {
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getUsers } from "../../../redux/userSlice";
 import { getAttendance, updateStatusAttendance } from "../../../redux/attendanceSlice";
 import "../cruds/loading.css";
 
@@ -14,7 +15,7 @@ const TABLE_HEAD = [
   "ID",
   "MSSV",
   "Tên sinh viên",
-  "Mã sự kiện",
+  "Tên sự kiện",
   "Thời điểm đăng ký",
   "Trạng thái",
   ""
@@ -23,10 +24,12 @@ const TABLE_HEAD = [
 const AttendanceManagement = () => {
   const dispatch = useDispatch();
   const attendance = useSelector((state) => state.attendance.attendance);
+  const users = useSelector((state) => state.user.users);
 
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
+    dispatch(getUsers());
     dispatch(getAttendance());
   }, [dispatch]);
 
@@ -39,7 +42,6 @@ const AttendanceManagement = () => {
       title: "Cập nhật trạng thái",
       input: "select",
       inputOptions: {
-        "REGISTERED": "Đã đăng ký",
         "ATTENDED": "Đã tham gia",
         "CANCELLED": "Không tham gia",
       },
@@ -75,7 +77,7 @@ const AttendanceManagement = () => {
                 <input
                   type="text"
                   className="w-full outline-none bg-transparent"
-                  placeholder="Tìm kiếm..."
+                  placeholder="Tìm kiếm theo tên sự kiện"
                   value={searchTerm}
                   onChange={handleSearch}
                 />
@@ -121,15 +123,14 @@ const AttendanceManagement = () => {
             </thead>
             <tbody>
               {attendance.filter(
-                  (item) =>
-                    item.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    item.studentId.includes(searchTerm)
+                  (item) => item.eventName.toLowerCase().includes(searchTerm)
                 )
                 .map(
                   (
-                    { id, studentId, studentName, eventId, registeredAt, attendanceStatus },
+                    { id, userId, eventName, registeredAt, attendanceStatus },
                     index
                   ) => {
+                    const user = users.find((user) => user.id === userId);
                     const isLast = index === attendance.length - 1;
                     const classes = isLast
                       ? "p-4"
@@ -152,7 +153,7 @@ const AttendanceManagement = () => {
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {studentId}
+                            {user?.studentId}
                           </Typography>
                         </td>
                         <td className={classes}>
@@ -161,7 +162,7 @@ const AttendanceManagement = () => {
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {studentName}
+                            {user?.name}
                           </Typography>
                         </td>
                         <td className={classes}>
@@ -170,7 +171,7 @@ const AttendanceManagement = () => {
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {eventId}
+                            {eventName}
                           </Typography>
                         </td>
                         <td className={classes}>
@@ -188,7 +189,7 @@ const AttendanceManagement = () => {
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {status}
+                            {attendanceStatus}
                           </Typography>
                         </td>
                         <td className={classes}>

@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public UserDto updateUser(@PathVariable("id") String id, @RequestPart("avatar") MultipartFile avatar, @RequestPart("data") UserDto userDto) {
+    public UserDto updateUser(@PathVariable("id") String id, @RequestPart(name = "avatar", required = false) MultipartFile avatar, @RequestPart("data") UserDto userDto) {
         return userService.updateUser(id, avatar, userDto);
     }
 
@@ -42,7 +42,7 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    @GetMapping("/search-by-username/{username}")
+    @GetMapping("/by-username/{username}")
     public List<UserDto> searchUsersByUsername(@PathVariable("username") String username) {
         return userService.getUsersByUsernameContaining(username);
     }

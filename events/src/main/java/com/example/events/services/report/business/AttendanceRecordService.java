@@ -40,8 +40,7 @@ public class AttendanceRecordService {
         AttendanceRecord updatedAttendanceRecord = attendanceRecordRepository.findById(id).orElse(null);
 
         if (updatedAttendanceRecord != null) {
-            updatedAttendanceRecord.setStudentId(attendanceRecordDto.getStudentId());
-            updatedAttendanceRecord.setStudentName(attendanceRecordDto.getStudentName());
+            updatedAttendanceRecord.setUserId(attendanceRecordDto.getUserId());
             updatedAttendanceRecord.setEventId(attendanceRecordDto.getEventId());
             updatedAttendanceRecord.setAttendanceStatus(AttendanceStatus.fromValue(attendanceRecordDto.getAttendanceStatus()));
 
@@ -54,6 +53,11 @@ public class AttendanceRecordService {
 
     public List<AttendanceRecordDto> getAttendanceRecordsByEventId(String eventId) {
         List<AttendanceRecord> attendanceRecords = attendanceRecordRepository.findByEventId(eventId);
+        return attendanceRecords.stream().map(attendanceRecordMapper::toDto).collect(Collectors.toList());
+    }
+
+    public List<AttendanceRecordDto> getAttendanceRecordsByUserId(String userId) {
+        List<AttendanceRecord> attendanceRecords = attendanceRecordRepository.findByUserId(userId);
         return attendanceRecords.stream().map(attendanceRecordMapper::toDto).collect(Collectors.toList());
     }
 }

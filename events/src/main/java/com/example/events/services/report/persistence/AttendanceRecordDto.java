@@ -2,20 +2,19 @@ package com.example.events.services.report.persistence;
 
 public class AttendanceRecordDto {
     private String id;
-    private String studentId;
-    private String studentName;
+    private String userId;
     private String eventId;
+    private String eventName;
     private String registeredAt;
     private String attendanceStatus;
 
     public AttendanceRecordDto() { }
 
-    public AttendanceRecordDto(String studentId, String studentName, String eventId,
-        String registeredAt, String attendanceStatus) {
-
-        this.studentId = studentId;
-        this.studentName = studentName;
+    public AttendanceRecordDto(String userId, String eventId, String eventName, String registeredAt, String attendanceStatus) {
+        this.id = "";
+        this.userId = userId;
         this.eventId = eventId;
+        this.eventName = eventName;
         this.registeredAt = registeredAt;
         this.attendanceStatus = attendanceStatus;
     }
@@ -28,20 +27,12 @@ public class AttendanceRecordDto {
         this.id = id;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
-
-    public String getStudentName() {
-        return studentName;
-    }
-
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getEventId() {
@@ -51,7 +42,15 @@ public class AttendanceRecordDto {
     public void setEventId(String eventId) {
         this.eventId = eventId;
     }
-    
+
+    public String getEventName() {
+        return eventName;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+
     public String getRegisteredAt() {
         return registeredAt;
     }

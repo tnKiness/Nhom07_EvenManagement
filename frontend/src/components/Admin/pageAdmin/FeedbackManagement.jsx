@@ -1,13 +1,14 @@
+import Swal from "sweetalert2";
 import {
   TrashIcon,
 } from "@heroicons/react/24/solid";
 import { CardBody, Button, Card, CardHeader, Typography } from "@material-tailwind/react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import "../cruds/loading.css";
-import { getFeedback } from "../../../redux/feedbackSlice";
+import { getFeedback, deleteFeedbackById } from "../../../redux/feedbackSlice";
 import { getUsers } from "../../../redux/userSlice";
 import { getEvent } from "../../../redux/eventSlice";
+import "../cruds/loading.css";
 
 const TABLE_HEAD = [
   "id",
@@ -20,15 +21,30 @@ const TABLE_HEAD = [
 
 const FeedbackManagement = () => {
   const dispatch = useDispatch();
+  
   const feedback = useSelector((state) => state.feedback.feedback);
-  const users = useSelector((state) => state.user.users || []);
-  const event = useSelector((state) => state.event.event);
+  const users = useSelector((state) => state.user.users);
+  const events = useSelector((state) => state.event.event);
 
   useEffect(() => {
-    dispatch(getFeedback());
-    dispatch(getUsers());
     dispatch(getEvent());
+    dispatch(getUsers());
+    dispatch(getFeedback());
   }, [dispatch]);
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Bạn có chắc chắn muốn xóa bình luận này?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Xóa",
+      cancelButtonText: "Hủy",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteFeedbackById(id));
+      }
+    });
+  };
 
   return (
     <div className="content-wrapper">
@@ -43,7 +59,7 @@ const FeedbackManagement = () => {
         <CardBody className="container-fluid px-0">
           <table className="w-full min-w-max table-auto text-left">
             <thead>
-              <tr className=" bg-blue-800 text-white">
+              <tr className="bg-blue-800 text-white">
                 {TABLE_HEAD.map((head) => (
                   <th
                     key={head}
@@ -64,6 +80,9 @@ const FeedbackManagement = () => {
               {feedback.length > 0 &&
                 feedback.map(
                   ({ id, userId, eventId, content, createdAt }, index) => {
+                    const user = users.find((user) => user.id === userId);
+                    const event = events.find((e) => e.id === eventId);
+
                     const isLast = index === feedback.length - 1;
                     const classes = isLast
                       ? "p-4"
@@ -86,7 +105,7 @@ const FeedbackManagement = () => {
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {users.find((user) => user.id === userId)?.name}
+                            {user?.name}
                           </Typography>
                         </td>
                         <td className={classes}>
@@ -95,7 +114,7 @@ const FeedbackManagement = () => {
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {event.find((e) => e.id === eventId)?.name}
+                            {event?.name}
                           </Typography>
                         </td>
                         <td className={classes}>
@@ -118,7 +137,10 @@ const FeedbackManagement = () => {
                         </td>
 
                         <td className={classes}>
-                          <Button className="inline-flex items-center gap-2 justify-center px-8 py-4 text-white bg-red-500 rounded-lg h-[50px] w-[50px]">
+                          <Button 
+                            className="inline-flex items-center gap-2 justify-center px-8 py-4 text-white bg-red-500 rounded-lg h-[50px] w-[50px]"
+                            onClick={() => handleDelete(id)}
+                          >
                             <span>
                               <TrashIcon className="h-4 w-4" />
                             </span>

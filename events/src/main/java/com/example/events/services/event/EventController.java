@@ -32,7 +32,7 @@ public class EventController {
     }
 
     @PutMapping(path = "/{id}", consumes = { "multipart/form-data" })
-    public EventDto updateEvent(@PathVariable("id") String id, @RequestPart("image") MultipartFile image, @RequestPart("data") EventDto eventDto) {
+    public EventDto updateEvent(@PathVariable("id") String id, @RequestPart(name = "image", required = false) MultipartFile image, @RequestPart("data") EventDto eventDto) {
         return eventService.updateEvent(id, image, eventDto);
     }
 

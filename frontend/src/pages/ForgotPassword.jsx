@@ -25,7 +25,7 @@ const ForgotPassword = () => {
         Swal.fire({
           icon: "error",
           title: "Lỗi",
-          text: "Gửi về email thất bại ",
+          text: "Gửi về email thất bại",
         });
       }
       console.log(res);

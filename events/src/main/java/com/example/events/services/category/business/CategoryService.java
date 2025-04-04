@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.events.services.category.persistence.Category;
+import com.example.events.services.category.persistence.CategoryDto;
 import com.example.events.services.category.persistence.CategoryRepository;
 
 @Service

@@ -30,11 +30,11 @@ export const getUsers = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "user/update-user",
-  async ({ id, data1: data }, { rejectWithValue }) => {
+  async ({ id, formData }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
         `http://localhost:8080/api/users/${id}`,
-        data,
+        formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",

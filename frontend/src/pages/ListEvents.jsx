@@ -6,15 +6,16 @@ import { getEvent } from "../redux/eventSlice";
 import axios from "axios";
 
 function ListEvents() {
-  const vaccineListRef = useRef(null);
+  const eventListRef = useRef(null);
   const dispatch = useDispatch();
-  const vaccine = useSelector((state) => state.vaccine.vaccine);
+  const events = useSelector((state) => state.event.event);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [categoryList, setCategoryList] = useState([]);
   const category = useSelector((state) => state.category.category);
+
   const getCategoryList = async () => {
     const res = await axios.get("http://localhost:8080/api/category");
-    setCategoryList(res.data.category);
+    setCategoryList(res.data);
   };
 
   // Hàm xử lý sự kiện khi thay đổi danh mục
@@ -22,11 +23,11 @@ function ListEvents() {
     setSelectedCategory(event.target.value);
   };
 
-  // Lọc danh sách vắc xin theo danh mục
-  const filteredVaccines =
+  // Lọc danh sách sự kiện theo danh mục
+  const filteredEvents =
     selectedCategory === "All"
-      ? vaccine
-      : vaccine.filter((item) => item.category === selectedCategory);
+      ? events
+      : events.filter((item) => item.category === selectedCategory);
 
   useEffect(() => {
     dispatch(getEvent());
@@ -36,8 +37,8 @@ function ListEvents() {
   return (
     <div>
       <div
-        ref={vaccineListRef}
-        className="container-fluid  pt-36 wow fadeInUp"
+        ref={eventListRef}
+        className="container-fluid pt-36 wow fadeInUp"
         data-wow-delay="0.1s"
       >
         <div className="container">
@@ -59,7 +60,7 @@ function ListEvents() {
                     <option value="All">Tất cả</option>
                     {categoryList.length > 0 &&
                       categoryList?.map((item) => (
-                        <option key={item._id} value={item._id}>
+                        <option key={item.id} value={item.id}>
                           {item.name}
                         </option>
                       ))}
@@ -69,11 +70,11 @@ function ListEvents() {
             </div>
           </div>
           <div className="w-full grid grid-cols-4">
-            {filteredVaccines.length > 0 &&
-              filteredVaccines?.map((item) => {
+            {filteredEvents.length > 0 &&
+              filteredEvents?.map((item) => {
                 return (
-                  <div key={item._id}>
-                    <Link to={`/vacxindetail/${item._id}`}>
+                  <div key={item.id}>
+                    <Link to={`/event-detail/${item.id}`}>
                       <div
                         className="max-w-sm mb-5 wow zoomIn bg-white dark:bg-gray-800 dark:border-gray-700"
                         data-wow-delay="0.9s"

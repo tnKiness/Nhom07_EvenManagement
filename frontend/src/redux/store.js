@@ -7,7 +7,6 @@ import patientSlice from "./patientSlice";
 import categorySlice from "./categorySlice";
 import vaccinePlanSlice from "./vaccinePlanSlice";
 import feedbackSlice from "./feedbackSlice";
-import cartSlice from "./cartSlice";
 import attendanceSlice from "./attendanceSlice";
 import notificationSlice from "./notificationSlice";
 import postSlice from "./postSlice";
@@ -23,7 +22,6 @@ const store = configureStore({
     category: categorySlice,
     vaccinePlan: vaccinePlanSlice,
     feedback: feedbackSlice,
-    cart: cartSlice,
     attendance: attendanceSlice,
     notification: notificationSlice,
     post: postSlice,

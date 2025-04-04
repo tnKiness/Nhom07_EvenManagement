@@ -74,6 +74,7 @@ const AddAccount = () => {
         showConfirmButton: false,
         timer: 1500,
       });
+      navigate("/account-management");
     } catch (error) {
       dispatch(registerFailure(error.message));
     }
@@ -165,7 +166,7 @@ const AddAccount = () => {
             <button className="block w-full h-10 bg-blue-800 text-white rounded-md">
               Thêm
             </button>
-            <a href="/event-management">Quay lại</a>
+            <a href="/account-management">Quay lại</a>
           </form>
         </div>
       </div>

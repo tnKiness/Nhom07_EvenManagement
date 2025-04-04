@@ -26,7 +26,7 @@ public class NotificationController {
     }
 
     @GetMapping("/{id}")
-    public NotificationDto getNotificationById(@RequestParam String id) {
+    public NotificationDto getNotificationById(@PathVariable String id) {
         return notificationService.getNotificationById(id);
     }
 }

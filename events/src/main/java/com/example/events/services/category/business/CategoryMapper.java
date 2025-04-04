@@ -3,6 +3,7 @@ package com.example.events.services.category.business;
 import org.springframework.stereotype.Component;
 
 import com.example.events.services.category.persistence.Category;
+import com.example.events.services.category.persistence.CategoryDto;
 
 @Component
 public class CategoryMapper {

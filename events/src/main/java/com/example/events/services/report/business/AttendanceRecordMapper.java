@@ -11,9 +11,9 @@ import com.example.events.util.helper.DateTimeParser;
 public class AttendanceRecordMapper {
     public AttendanceRecordDto toDto(AttendanceRecord attendanceRecord) {
         AttendanceRecordDto attendanceRecordDto = new AttendanceRecordDto(
+            attendanceRecord.getUserId(),
             attendanceRecord.getEventId(),
-            attendanceRecord.getStudentId(),
-            attendanceRecord.getStudentName(),
+            attendanceRecord.getEventName(),
             DateTimeParser.fromLocalDateTime(attendanceRecord.getRegisteredAt()),
             attendanceRecord.getAttendanceStatus().name()
         );
@@ -23,13 +23,13 @@ public class AttendanceRecordMapper {
 
     public AttendanceRecord toEntity(AttendanceRecordDto attendanceRecordDto) {
         AttendanceRecord attendanceRecord = new AttendanceRecord(
+            attendanceRecordDto.getUserId(),
             attendanceRecordDto.getEventId(),
-            attendanceRecordDto.getStudentId(),
-            attendanceRecordDto.getStudentName(),
+            attendanceRecordDto.getEventName(),
+            DateTimeParser.toLocalDateTime(attendanceRecordDto.getRegisteredAt()),
             AttendanceStatus.fromValue(attendanceRecordDto.getAttendanceStatus())
         );
         attendanceRecord.setId(attendanceRecordDto.getId());
-        attendanceRecord.setRegisteredAt(DateTimeParser.toLocalDateTime(attendanceRecordDto.getRegisteredAt()));
         return attendanceRecord;
     }
 }

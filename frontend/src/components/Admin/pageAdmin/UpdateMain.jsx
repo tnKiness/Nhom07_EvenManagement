@@ -1,4 +1,4 @@
-// TODO: Update user info
+// TODO: Resolve NULL id after updating
 
 import { useEffect, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,10 +11,9 @@ import "../cruds/loading.css";
 import Footer from "../../post/Footer";
 
 const schema = yup.object().shape({
-  username: yup.string().required("Vui lòng nhập tên"),
-  phone: yup.string().required("Vui lòng nhập số điện thoại"),
-  gender: yup.string().required("Vui lòng chọn giới tính"),
-  address: yup.string().required("Vui lòng nhập địa chỉ"),
+  name: yup.string().required("Vui lòng nhập tên"),
+  email: yup.string().required("Vui lòng nhập địa chỉ email"),
+  phoneNumber: yup.string().required("Vui lòng nhập số điện thoại"),
 });
 
 const UpdateMain = () => {
@@ -29,34 +28,37 @@ const UpdateMain = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
 
+  const isLoading = useSelector((state) => state.user.isLoading);
+
   useEffect(() => {
     const getUser = async () => {
       dispatch(getUserById(id));
     };
     getUser();
   }, [dispatch, id]);
-  // const user = useSelector((state) => state.auth.currentUser);
+
   const user = useSelector((state) => state.auth.currentUser);
-  // const user = useSelector((state) => state.user.users);
-  console.log(user);
-  const isLoading = useSelector((state) => state.user.isLoading);
-  const [username, setUsername] = useState(user?.username);
-  const [phone, setPhone] = useState(user?.phone);
-  const [gender, setGender] = useState(user?.gender);
-  const [age, setAge] = useState(user?.age);
-  const [address, setAddress] = useState(user?.address);
-  const [avatar, setAvatar] = useState(user?.avatar);
+
+  const [name, setName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
+  const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
+  const [avatar, setAvatar] = useState(user.avatar);
 
   const handleSelectFile = (e) => {
     setAvatar(e.target.files[0]);
   };
 
   const handleUpdateUser = async (data) => {
-    const data1 = {
+    let formData = new FormData();
+    formData.append("avatar", avatar ? avatar : user.avatar);
+    formData.append("data", new Blob([JSON.stringify({
       ...data,
-      avatar: avatar ? avatar : user?.avatar,
-    };
-    dispatch(updateUser({ id, data1 }));
+      "username": user.username,
+      "password": user.password,
+      "role": user.role,
+      "studentId": user.studentId,
+    })], { type: "application/json" }));
+    dispatch(updateUser({ id, formData }));
   };
 
   useEffect(() => {
@@ -84,7 +86,7 @@ const UpdateMain = () => {
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="username"
+              htmlFor="name"
             >
               Tên
             </label>
@@ -92,85 +94,45 @@ const UpdateMain = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
               id="name"
-              {...register("username")}
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              {...register("name")}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
-            <p className="text-red-500 mt-1">{errors.username?.message}</p>
+            <p className="text-red-500 mt-1">{errors.name?.message}</p>
           </div>
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="phone"
+              htmlFor="email"
+            >
+              Email
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              type="text"
+              id="name"
+              {...register("email")}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <p className="text-red-500 mt-1">{errors.email?.message}</p>
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="phoneNumber"
             >
               Số điện thoại
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
-              id="phone"
-              {...register("phone")}
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              id="phoneNumber"
+              {...register("phoneNumber")}
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
             />
-            <p className="text-red-500 mt-1">{errors.phone?.message}</p>
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="gender"
-            >
-              Giới tính
-            </label>
-            <select
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="gender"
-              {...register("gender")}
-            >
-              <option
-                selected="selected"
-                onChange={(e) => setGender(e.target.value)}
-                value={gender}
-              >
-                Chọn giới tính
-              </option>
-              <option value="nam">Nam</option>
-              <option value="nu">Nữ</option>
-            </select>
-            <p className="text-red-500 mt-1">{errors.gender?.message}</p>
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="dateOfBirth"
-            >
-              Ngày sinh
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="date"
-              id="dateOfBirth"
-              {...register("age")}
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="address"
-            >
-              Địa chỉ cụ thể
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="text"
-              id="address"
-              {...register("address")}
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
-            <p className="text-red-500 mt-1">{errors.address?.message}</p>
+            <p className="text-red-500 mt-1">{errors.phoneNumber?.message}</p>
           </div>
           <div className="mb-4">
             <label

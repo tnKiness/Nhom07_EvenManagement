@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.events.services.cloudinary.CloudinaryService;
-import com.example.events.services.notification.business.NotificationMapper;
+import com.example.events.services.notification.persistence.Notification;
 import com.example.events.services.notification.persistence.NotificationDto;
 import com.example.events.services.scorecard.persistence.Scorecard;
 import com.example.events.services.scorecard.persistence.ScorecardRepository;
@@ -19,6 +19,7 @@ import com.example.events.services.user.persistence.User;
 import com.example.events.services.user.persistence.UserDto;
 import com.example.events.services.user.persistence.UserRepository;
 import com.example.events.util.enums.UserRole;
+import com.example.events.util.helper.DateTimeParser;
 
 @Service
 public class UserService {
@@ -31,9 +32,6 @@ public class UserService {
 
     @Autowired
     private ScorecardRepository scorecardRepository;
-
-    @Autowired
-    private NotificationMapper notificationMapper;
 
     @Autowired
     private CloudinaryService cloudinaryService;
@@ -132,10 +130,14 @@ public class UserService {
         List<User> users = userRepository.findAll();
         users.forEach(user -> {
             if (!user.getRole().equals(UserRole.ROLE_ADMIN)) {
+                Notification notification = new Notification(notificationDto.getMessage(), DateTimeParser.toLocalDateTime(notificationDto.getCreatedAt()));
+                notification.setId(notificationDto.getId());
+                notification.setSentAt(DateTimeParser.toLocalDateTime(notificationDto.getSentAt()));
+
                 if (user.getNotifications() != null) {
-                    user.getNotifications().add(notificationMapper.toEntity(notificationDto));
+                    user.getNotifications().add(notification);
                 } else {
-                    user.setNotifications(List.of(notificationMapper.toEntity(notificationDto)));
+                    user.setNotifications(List.of(notification));
                 }
                 userRepository.save(user);
             }

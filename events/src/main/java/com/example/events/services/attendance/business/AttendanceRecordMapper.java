@@ -1,9 +1,9 @@
-package com.example.events.services.report.business;
+package com.example.events.services.attendance.business;
 
 import org.springframework.stereotype.Component;
 
-import com.example.events.services.report.persistence.AttendanceRecord;
-import com.example.events.services.report.persistence.AttendanceRecordDto;
+import com.example.events.services.attendance.persistence.AttendanceRecord;
+import com.example.events.services.attendance.persistence.AttendanceRecordDto;
 import com.example.events.util.enums.AttendanceStatus;
 import com.example.events.util.helper.DateTimeParser;
 

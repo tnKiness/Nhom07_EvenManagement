@@ -1,4 +1,4 @@
-package com.example.events.services.report.business;
+package com.example.events.services.attendance.business;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.events.services.report.persistence.AttendanceRecord;
-import com.example.events.services.report.persistence.AttendanceRecordDto;
-import com.example.events.services.report.persistence.AttendanceRecordRepository;
+import com.example.events.services.attendance.persistence.AttendanceRecord;
+import com.example.events.services.attendance.persistence.AttendanceRecordDto;
+import com.example.events.services.attendance.persistence.AttendanceRecordRepository;
 import com.example.events.util.enums.AttendanceStatus;
 
 @Service

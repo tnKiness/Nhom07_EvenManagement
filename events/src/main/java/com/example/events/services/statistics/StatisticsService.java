@@ -5,9 +5,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.events.services.attendance.business.AttendanceRecordService;
 import com.example.events.services.event.business.EventService;
 import com.example.events.services.feedback.business.FeedbackService;
-import com.example.events.services.report.business.AttendanceRecordService;
 import com.example.events.services.user.business.UserService;
 
 @Service

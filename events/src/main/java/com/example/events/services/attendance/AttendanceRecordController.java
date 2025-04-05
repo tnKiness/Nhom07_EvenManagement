@@ -1,12 +1,12 @@
-package com.example.events.services.report;
+package com.example.events.services.attendance;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.events.services.report.business.AttendanceRecordService;
-import com.example.events.services.report.persistence.AttendanceRecordDto;
+import com.example.events.services.attendance.business.AttendanceRecordService;
+import com.example.events.services.attendance.persistence.AttendanceRecordDto;
 
 @RestController
 @RequestMapping("/api/attendance")

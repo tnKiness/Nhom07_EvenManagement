@@ -1,4 +1,4 @@
-package com.example.events.services.report.persistence;
+package com.example.events.services.attendance.persistence;
 
 import java.util.List;
 

@@ -4,6 +4,7 @@ public class NotificationDto {
     private String id;
     private String message;
     private String createdAt;
+    private String sentAt;
 
     public NotificationDto() { }
 
@@ -11,6 +12,7 @@ public class NotificationDto {
         this.id = "";
         this.message = message;
         this.createdAt = createdAt;
+        this.sentAt = "";
     }
 
     public String getId() {
@@ -35,5 +37,13 @@ public class NotificationDto {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getSentAt() {
+        return sentAt;
+    }
+
+    public void setSentAt(String sentAt) {
+        this.sentAt = sentAt;
     }
 }

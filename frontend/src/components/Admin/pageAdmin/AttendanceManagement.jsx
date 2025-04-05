@@ -189,17 +189,24 @@ const AttendanceManagement = () => {
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {attendanceStatus}
+                            {{
+                              "REGISTERED": "Đã đăng ký",
+                              "ATTENDED": "Đã tham gia",
+                              "CANCELLED": "Đã hủy",
+                            }[attendanceStatus]}
                           </Typography>
                         </td>
-                        <td className={classes}>
-                          <button
-                            className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full"
-                            onClick={() => handleUpdateStatus(id)}
-                          >
-                            Cập nhật
-                          </button>
-                        </td>
+
+                        {attendanceStatus === "REGISTERED" && (
+                          <td className={classes}>
+                            <button
+                              className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full"
+                              onClick={() => handleUpdateStatus(id)}
+                            >
+                              Cập nhật
+                            </button>
+                          </td>
+                        )}
                       </tr>
                     );
                   }

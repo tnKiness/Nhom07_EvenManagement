@@ -9,14 +9,19 @@ import com.example.events.util.helper.DateTimeParser;
 @Component
 public class NotificationMapper {
     public NotificationDto toDto(Notification notification) {
-        NotificationDto notificationDto = new NotificationDto(notification.getMessage(), DateTimeParser.fromLocalDateTime(notification.getCreatedAt()));
+        NotificationDto notificationDto = new NotificationDto(
+            notification.getMessage(),
+            DateTimeParser.fromLocalDateTime(notification.getCreatedAt())
+        );
         notificationDto.setId(notification.getId());
+        notificationDto.setSentAt(DateTimeParser.fromLocalDateTime(notification.getSentAt()));
         return notificationDto;
     }
 
     public Notification toEntity(NotificationDto notificationDto) {
         Notification notification = new Notification(notificationDto.getMessage(), DateTimeParser.toLocalDateTime(notificationDto.getCreatedAt()));
         notification.setId(notificationDto.getId());
+        notification.setSentAt(DateTimeParser.toLocalDateTime(notificationDto.getSentAt()));
         return notification;
     }
 }

@@ -28,6 +28,7 @@ const AddNotification = () => {
       addNotification({
         message,
         createdAt: new Date(),
+        sentAt: new Date(),
       })
     );
   };

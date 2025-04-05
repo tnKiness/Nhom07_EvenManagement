@@ -34,8 +34,13 @@ const Notification = () => {
 
   const handleMassNotify = async (id) => {
     const notification = notifications.find((notification) => notification.id === id);
+    const toSend = {
+      ...notification,
+      sentAt: new Date(),
+    }
+
     try {
-      await axios.post("http://localhost:8080/api/users/mass-notify", notification);
+      await axios.post("http://localhost:8080/api/users/mass-notify", toSend);
       Swal.fire({
         icon: "success",
         title: "Gửi thông báo thành công",

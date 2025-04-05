@@ -79,15 +79,15 @@ const Header = () => {
             <Link className="nav-link active" to={"/attendance-history"}>
               Lịch Sử Tham Gia
             </Link>
-            <Link className="nav-link active" to={""}>
-              Liên Hệ
+            <Link className="nav-link active" to={`/my-notifications/${user?.id}`}>
+              Thông Báo
             </Link>
           </div>
           <ul className="nav-link flex items-center">
             <img 
               className="w-[50px] rounded-full"
-              src={user 
-                ? (user?.avatar
+              src={user
+                ? (user.avatar
                   ? user.avatar
                   : "https://i.pinimg.com/736x/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg")
                 : ""
@@ -115,7 +115,7 @@ const Header = () => {
                   <li className="dropdown-menu">
                     <a
                       className="dropdown-item"
-                      href={`/update-info/${user.id}`}
+                      href={`/update-info/${user?.id}`}
                     >
                       Chỉnh Sửa Hồ Sơ
                     </a>

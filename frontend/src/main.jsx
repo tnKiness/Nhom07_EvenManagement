@@ -8,8 +8,6 @@ import HomePage from "./pages/HomePage.jsx";
 import { Provider } from "react-redux";
 import store from "./redux/store.js";
 import SignIn from "./pages/SignIn.jsx";
-import ForgotPassword from "./pages/ForgotPassword.jsx";
-import ResetPassword from "./pages/ResetPassword.jsx";
 import AccountManagement from "./components/Admin/pageAdmin/AccountManagement.jsx";
 import AddAccount from "./components/Admin/cruds/AddAccount.jsx";
 import EventManagement from "./components/Admin/pageAdmin/EventManagement.jsx";
@@ -28,7 +26,7 @@ import LayoutAdmin from "./components/LayoutAdmin.jsx";
 import CategoryMain from "./components/Admin/pageAdmin/CategoryMain.jsx";
 import ListEvents from "./pages/ListEvents.jsx";
 import AttendanceHistory from "./pages/AttendanceHistory.jsx";
-import CategoryPage from "./pages/CategoryPage.jsx";
+import NotificationPage from "./pages/NotificationPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -43,14 +41,6 @@ const router = createBrowserRouter([
         element: <RegisterSuccess></RegisterSuccess>,
       },
       {
-        path: "/forgot-password",
-        element: <ForgotPassword></ForgotPassword>,
-      },
-      {
-        path: "/reset-password",
-        element: <ResetPassword></ResetPassword>,
-      },
-      {
         path: "/event-detail/:id",
         element: <EventDetail></EventDetail>,
       },
@@ -63,8 +53,8 @@ const router = createBrowserRouter([
         element: <ListEvents></ListEvents>,
       },
       {
-        path: "/category/:id",
-        element: <CategoryPage></CategoryPage>,
+        path: "/my-notifications/:id",
+        element: <NotificationPage></NotificationPage>,
       },
       {
         path: "/attendance-history",

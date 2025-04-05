@@ -62,8 +62,7 @@ const authSlice = createSlice({
       const user = JSON.stringify({
         username: others.sub,
         id: others.id,
-        role: others.role,
-        avatar: others.avatar,
+        role: others.role
       });
 
       Cookies.set("token", token);

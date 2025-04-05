@@ -11,12 +11,14 @@ public class Notification {
     
     private String message;
     private LocalDateTime createdAt;
+    private LocalDateTime sentAt;
 
     public Notification() { }
 
     public Notification(String message, LocalDateTime createdAt) {
         this.message = message;
         this.createdAt = createdAt;
+        this.sentAt = LocalDateTime.now();
     }
 
     public String getId() {
@@ -43,8 +45,17 @@ public class Notification {
         this.createdAt = createdAt;
     }
 
+    public LocalDateTime getSentAt() {
+        return sentAt;
+    }
+
+    public void setSentAt(LocalDateTime sentAt) {
+        this.sentAt = sentAt;
+    }
+
     @Override
     public String toString() {
-        return "Notification [id=" + id + ", message=" + message + ", createdAt=" + createdAt + "]";
+        return "Notification [id=" + id + ", message=" + message + ", createdAt=" + createdAt + ", sentAt=" + sentAt
+                + "]";
     }
 }

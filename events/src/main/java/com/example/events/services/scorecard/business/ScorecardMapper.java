@@ -1,19 +1,22 @@
 package com.example.events.services.scorecard.business;
 
-import java.time.LocalDateTime;
-
 import org.springframework.stereotype.Component;
 
 import com.example.events.services.scorecard.persistence.Scorecard;
 import com.example.events.services.scorecard.persistence.ScorecardDto;
+import com.example.events.util.helper.DateTimeParser;
 
 @Component
 public class ScorecardMapper {
     public ScorecardDto toDto(Scorecard scorecard) {
-        return new ScorecardDto(scorecard.getScore(), scorecard.getLastUpdated().toString());
+        ScorecardDto scorecardDto = new ScorecardDto(scorecard.getScore(), DateTimeParser.fromLocalDateTime(scorecard.getLastUpdated()));
+        scorecardDto.setId(scorecard.getId());
+        return scorecardDto;
     }
 
     public Scorecard toEntity(ScorecardDto scorecardDto) {
-        return new Scorecard(scorecardDto.getScore(), LocalDateTime.parse(scorecardDto.getLastUpdated()));
+        Scorecard scorecard = new Scorecard(scorecardDto.getScore(), DateTimeParser.toLocalDateTime(scorecardDto.getLastUpdated()));
+        scorecard.setId(scorecardDto.getId());
+        return scorecard;
     }
 }

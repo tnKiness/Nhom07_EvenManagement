@@ -92,11 +92,11 @@ public class UserService {
 
             if (avatar != null) {
                 Map<?, ?> uploadResult = cloudinaryService.upload(avatar);
-                updatedUser.setAvatar((String)uploadResult.get("secure_url"));
+                updatedUser.setAvatar(uploadResult.get("url").toString());
             }
 
             userRepository.save(updatedUser);
-            return userDto;
+            return userMapper.toDto(updatedUser);
         } else {
             throw new RuntimeException("User not found with id: " + id);
         }

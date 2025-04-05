@@ -29,13 +29,21 @@ public class UserMapper {
         List<Notification> userNotifications = user.getNotifications();
         if (userNotifications != null) {
             userDto.setNotifications(userNotifications.stream().map(notification -> {
-                return new NotificationDto(notification.getMessage(), notification.getCreatedAt().toString());
+                NotificationDto notificationDto = new NotificationDto(
+                    notification.getMessage(),
+                    DateTimeParser.fromLocalDateTime(notification.getCreatedAt())
+                );
+                notificationDto.setSentAt(DateTimeParser.fromLocalDateTime(notification.getSentAt()));
+                notificationDto.setId(notification.getId());
+                return notificationDto;
             }).collect(Collectors.toList()));
         }
 
         Scorecard userScorecard = user.getScorecard();
         if (userScorecard != null) {
-            userDto.setScorecard(new ScorecardDto(userScorecard.getScore(), userScorecard.getLastUpdated().toString()));
+            ScorecardDto scorecardDto = new ScorecardDto(userScorecard.getScore(), DateTimeParser.fromLocalDateTime(userScorecard.getLastUpdated()));
+            scorecardDto.setId(userScorecard.getId());
+            userDto.setScorecard(scorecardDto);
         }
 
         userDto.setId(user.getId());
@@ -69,6 +77,7 @@ public class UserMapper {
                 user.setScorecard(userScorecard);
             }
 
+            user.setId(userDto.getId());
             return user;
         } else {
             User user = new User(userDto.getUsername(), userDto.getPassword(), userDto.getAvatar());

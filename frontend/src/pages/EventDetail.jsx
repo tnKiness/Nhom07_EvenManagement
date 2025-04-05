@@ -77,21 +77,24 @@ function EventDetail() {
             <h2 className="text-danger">Còn {remainingCapacity} suất</h2>
             <h2 className="text-danger">Thời gian: {new Date(event.startDate).toLocaleDateString("en-GB")} đến {new Date(event.endDate).toLocaleDateString("en-GB")}</h2>
             <p className="lead" dangerouslySetInnerHTML={{ __html: event.description }}></p>
-            {isCurrent && event.capacity > attendance.length
-              ? (
-                <button
-                  onClick={handleRegister}
-                  className="btn btn-primary btn-lg btn-block mb-2"
-                  disabled={isRegistered}
-                >
-                  {isRegistered ? "Đã đăng ký" : "ĐĂNG KÝ"}
-                </button>
-              )
-              : (
-                <button className="btn btn-secondary btn-lg btn-block mb-2" disabled>
-                  {isCurrent ? "Đã kết thúc" : "Hết suất"}
-                </button>
-              )}
+            {auth.currentUser 
+              ? (isCurrent && event.capacity > attendance.length
+                ? (
+                  <button
+                    onClick={handleRegister}
+                    className="btn btn-primary btn-lg btn-block mb-2"
+                    disabled={isRegistered}
+                  >
+                    {isRegistered ? "Đã đăng ký" : "ĐĂNG KÝ"}
+                  </button>
+                )
+                : (
+                  <button className="btn btn-secondary btn-lg btn-block mb-2" disabled>
+                    {isCurrent ? "Đã kết thúc" : "Hết suất"}
+                  </button>
+                ))
+              : <p className="lead" style={{ fontStyle: "italic" }}>Vui lòng đăng nhập để tiếp tục.</p>
+            }
           </div>
         </div>
       

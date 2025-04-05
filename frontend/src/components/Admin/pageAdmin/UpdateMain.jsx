@@ -28,8 +28,6 @@ const UpdateMain = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
 
-  const isLoading = useSelector((state) => state.user.isLoading);
-
   useEffect(() => {
     const getUser = async () => {
       dispatch(getUserById(id));
@@ -37,28 +35,29 @@ const UpdateMain = () => {
     getUser();
   }, [dispatch, id]);
 
-  const user = useSelector((state) => state.auth.currentUser);
-
-  const [name, setName] = useState(user.name);
-  const [email, setEmail] = useState(user.email);
-  const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
-  const [avatar, setAvatar] = useState(user.avatar);
+  const user = useSelector((state) => state.user.users);
+  const isLoading = useSelector((state) => state.user.isLoading);
+  const [avatar, setAvatar] = useState(user?.avatar);
 
   const handleSelectFile = (e) => {
     setAvatar(e.target.files[0]);
   };
 
   const handleUpdateUser = async (data) => {
+    const { name, email, phoneNumber } = data;
+
     let formData = new FormData();
     formData.append("avatar", avatar ? avatar : user.avatar);
     formData.append("data", new Blob([JSON.stringify({
-      ...data,
       "username": user.username,
       "password": user.password,
       "role": user.role,
       "studentId": user.studentId,
+      "name": name ? name : user.name,
+      "email": email ? email : user.email,
+      "phoneNumber": phoneNumber ? phoneNumber : user.phoneNumber,
     })], { type: "application/json" }));
-    dispatch(updateUser({ id, formData }));
+    dispatch(updateUser({ id: id, formData: formData }));
   };
 
   useEffect(() => {
@@ -91,12 +90,12 @@ const UpdateMain = () => {
               Tên
             </label>
             <input
+              name="name"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
               id="name"
               {...register("name")}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              defaultValue={user.name}
             />
             <p className="text-red-500 mt-1">{errors.name?.message}</p>
           </div>
@@ -108,12 +107,12 @@ const UpdateMain = () => {
               Email
             </label>
             <input
+              name="email"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
               id="name"
               {...register("email")}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              defaultValue={user.email}
             />
             <p className="text-red-500 mt-1">{errors.email?.message}</p>
           </div>
@@ -125,12 +124,12 @@ const UpdateMain = () => {
               Số điện thoại
             </label>
             <input
+              name="phoneNumber"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
               id="phoneNumber"
               {...register("phoneNumber")}
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              defaultValue={user.phoneNumber}
             />
             <p className="text-red-500 mt-1">{errors.phoneNumber?.message}</p>
           </div>

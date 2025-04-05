@@ -368,11 +368,6 @@ const SignIn = () => {
                     )}
                   </button>
                 </div>
-                <div className="flex items-center justify-between mt-2 text-blue-500">
-                  <a href="/forgot-password" className="text-sm underline">
-                    Quên mật khẩu?
-                  </a>
-                </div>
               </div>
               <div>
                 <button

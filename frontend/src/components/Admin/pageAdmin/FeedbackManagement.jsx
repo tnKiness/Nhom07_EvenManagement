@@ -39,6 +39,11 @@ const FeedbackManagement = () => {
       showCancelButton: true,
       confirmButtonText: "Xóa",
       cancelButtonText: "Hủy",
+      customClass: {
+        confirmButton: "swal-confirm-btn",
+        cancelButton: "swal-cancel-btn"
+      },
+      buttonsStyling: false,
     }).then((result) => {
       if (result.isConfirmed) {
         dispatch(deleteFeedbackById(id));

@@ -49,6 +49,11 @@ const AttendanceManagement = () => {
       showCancelButton: true,
       confirmButtonText: "Lưu",
       cancelButtonText: "Hủy",
+      buttonsStyling: false, 
+      customClass: {
+        confirmButton: "swal-accept-btn", 
+        cancelButton: "swal-cancel-btn", 
+      },
     }).then((result) => {
       if (result.isConfirmed) {
         const data = {

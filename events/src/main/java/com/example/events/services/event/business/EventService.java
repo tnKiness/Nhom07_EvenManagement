@@ -33,19 +33,26 @@ public class EventService {
     private CloudinaryService cloudinaryService;
 
     public EventDto addEvent(MultipartFile image, EventDto eventDto) {
-        Map<?, ?> uploadResult = cloudinaryService.upload(image);
-        System.out.println(uploadResult);
-        eventDto.setImage(uploadResult.get("url").toString());
-
+        // Tải hình ảnh lên Cloudinary và lấy URL
+        String imageUrl = Optional.ofNullable(image)
+                .map(file -> cloudinaryService.upload(file))
+                .map(uploadResult -> uploadResult.get("secure_url").toString())
+                .orElseThrow(() -> new RuntimeException("Image upload failed"));
+    
+        eventDto.setImage(imageUrl);
+    
+        // Chuyển đổi EventDto thành Event entity
         Event event = eventMapper.toEntity(eventDto);
-        Optional<Category> categoryDb = categoryRepository.findById(eventDto.getCategory());
-
-        if (categoryDb.isPresent()) {
-            event.setCategory(categoryDb.get());
-            eventRepository.save(event);
-        } else {
-            throw new RuntimeException("Category not found");
-        }
+    
+        // Tìm danh mục từ repository
+        Category category = categoryRepository.findById(eventDto.getCategory())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+    
+        event.setCategory(category);
+    
+        // Lưu Event vào cơ sở dữ liệu
+        eventRepository.save(event);
+    
         return eventDto;
     }
 
@@ -60,37 +67,38 @@ public class EventService {
     }
 
     public EventDto updateEvent(String id, MultipartFile image, EventDto eventDto) {
-        Optional<Event> eventDb = eventRepository.findById(id);
-
-        if (eventDb.isPresent()) {
-            Event updatedEvent = eventDb.get();
-
-            updatedEvent.setName(eventDto.getName());
-            updatedEvent.setDescription(eventDto.getDescription());
-
-            if (image != null) {
-                Map<?, ?> uploadResult = cloudinaryService.upload(image);
-                eventDto.setImage((String)uploadResult.get("secure_url"));
-            }
-            
-            updatedEvent.setImage(eventDto.getImage());
-            updatedEvent.setStartDate(DateTimeParser.toLocalDateTime(eventDto.getStartDate()));
-            updatedEvent.setEndDate(DateTimeParser.toLocalDateTime(eventDto.getEndDate()));
-            updatedEvent.setLocation(eventDto.getLocation());
-            updatedEvent.setCapacity(eventDto.getCapacity());
-
-            Optional<Category> categoryDb = categoryRepository.findById(eventDto.getCategory());
-            if (categoryDb.isPresent()) {
-                updatedEvent.setCategory(categoryDb.get());
-                eventRepository.save(updatedEvent);
-            } else {
-                throw new RuntimeException("Category not found");
-            }
-            return eventDto;
-        } else {
-            throw new RuntimeException("Event not found with id: " + id);
+        // Tìm Event theo id
+        Event updatedEvent = eventRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Event not found with id: " + id));
+    
+        // Cập nhật thông tin sự kiện
+        updatedEvent.setName(eventDto.getName());
+        updatedEvent.setDescription(eventDto.getDescription());
+    
+        // Cập nhật hình ảnh nếu có
+        if (image != null) {
+            Map<?, ?> uploadResult = cloudinaryService.upload(image);
+            eventDto.setImage((String) uploadResult.get("secure_url"));
         }
+    
+        updatedEvent.setImage(eventDto.getImage());
+        updatedEvent.setStartDate(DateTimeParser.toLocalDateTime(eventDto.getStartDate()));
+        updatedEvent.setEndDate(DateTimeParser.toLocalDateTime(eventDto.getEndDate()));
+        updatedEvent.setLocation(eventDto.getLocation());
+        updatedEvent.setCapacity(eventDto.getCapacity());
+    
+        // Cập nhật thông tin danh mục
+        Category category = categoryRepository.findById(eventDto.getCategory())
+            .orElseThrow(() -> new RuntimeException("Category not found"));
+    
+        updatedEvent.setCategory(category);
+    
+        // Lưu cập nhật
+        eventRepository.save(updatedEvent);
+    
+        return eventDto;
     }
+    
 
     public void deleteEvent(String id) {
         Optional<Event> eventDb = eventRepository.findById(id);

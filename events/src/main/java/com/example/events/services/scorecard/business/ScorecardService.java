@@ -50,12 +50,12 @@ public class ScorecardService {
     }
 
     public void deleteScorecard(String id) {
-        Optional<Scorecard> scorecardDb = scorecardRepository.findById(id);
-
-        if (scorecardDb.isPresent()) {
-            scorecardRepository.delete(scorecardDb.get());
-        } else {
-            throw new RuntimeException("Scorecard not found with id: " + id);
-        }
+        // Tìm Scorecard theo id
+        Scorecard scorecard = scorecardRepository.findById(id).orElseThrow(() -> 
+            new RuntimeException("Scorecard not found with id: " + id)
+        );
+    
+        // Xóa Scorecard nếu tìm thấy
+        scorecardRepository.delete(scorecard);
     }
 }

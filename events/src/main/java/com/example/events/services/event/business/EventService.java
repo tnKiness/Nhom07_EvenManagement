@@ -103,12 +103,22 @@ public class EventService {
     }
 
     public List<EventDto> getEventsByCategory(String categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElse(null);
-        if (category != null) {
-            List<Event> events = eventRepository.findByCategory(category);
-            return events.stream().map(eventMapper::toDto).collect(Collectors.toList());
-        } else {
-            throw new RuntimeException("Category not found with id: " + categoryId);
+        // Tìm Category theo categoryId
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+        
+        // Nếu Category tồn tại
+        if (categoryOptional.isEmpty()) {
+            throw new RuntimeException("Không tìm thấy Category với id: " + categoryId);
         }
+    
+        Category category = categoryOptional.get();
+        
+        // Lấy danh sách Events dựa trên Category
+        List<Event> events = eventRepository.findByCategory(category);
+    
+        // Chuyển danh sách Event thành danh sách EventDto
+        return events.stream()
+                     .map(eventMapper::toDto)
+                     .collect(Collectors.toList());
     }
 }

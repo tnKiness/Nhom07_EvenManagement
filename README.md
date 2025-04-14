@@ -34,4 +34,4 @@ Tài khoản mẫu:
 [Google Docs - Báo cáo](https://docs.google.com/document/d/160KTaMR-O9JICRL42knOODxxplQPVOVhr7HOzUw5Ta0/edit?tab=t.jtniadfyxuzc)
 
 ### LỜI CẢM ƠN
-Chúng em xin chân thành cảm ơn thầy Đặng Ngọc Hoàng Thành đã tận tình hướng dẫn và giúp đỡ trong suốt quá trình học tập và thực hiện đề tài.
+Chúng em xin chân thành cảm ơn thầy Võ Văn Hải đã tận tình hướng dẫn và giúp đỡ trong suốt quá trình học tập và thực hiện đề tài.

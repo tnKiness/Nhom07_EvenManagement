@@ -90,7 +90,7 @@ export const deleteFeedbackById = createAsyncThunk(
         icon: "success",
         text: "Xóa bình luận thành công",
       });
-      return res.data.feedback.id;
+      return payload;
     } catch (error) {
       Swal.fire({
         icon: "error",

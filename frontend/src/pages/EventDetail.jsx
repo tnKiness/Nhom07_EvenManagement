@@ -69,7 +69,7 @@ function EventDetail() {
               src={event.image}
               alt={event.name}
               className="img-fluid"
-              style={{ borderRadius: "5px", border: "1px solid #ddd", height: "auto", marginLeft: "120px" }}
+              style={{ borderRadius: "5px", border: "1px solid #ddd", height: "auto" }}
             />
           </div>
           <div className="col-md-6">
